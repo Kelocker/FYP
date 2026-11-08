@@ -1,0 +1,3016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orientation Studio - Malaysia Solar Panel Orientation</title>
+<meta name="description" content="Compare your solar panel's orientation against the ML-recommended optimum for your Malaysian city, live.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0d14">
+<link rel="icon" href="favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon/apolius-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="favicon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="favicon/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+
+     
+    --gold:        #d98f4a;
+    --gold-strong: color-mix(in oklch, var(--gold), black 12%);
+    --gold-soft:   color-mix(in oklch, var(--gold), white 35%);
+    --gold-dim:    color-mix(in oklch, var(--gold), black 55%);
+
+    --blue:        #a8ceff;
+    --blue-strong: color-mix(in oklch, var(--blue), black 14%);
+    --blue-soft:   color-mix(in oklch, var(--blue), white 35%);
+    --blue-dim:    color-mix(in oklch, var(--blue), black 58%);
+
+     
+    --violet:      oklch(72% 0.09 300);
+    --violet-soft: color-mix(in oklch, var(--violet), white 32%);
+
+     
+    --loss:      #ab2b2b;
+    --loss-soft: color-mix(in oklch, var(--loss), white 34%);
+
+     
+    --danger:      #e05252;
+    --danger-soft: color-mix(in oklch, var(--danger), white 30%);
+
+     
+    --radius-xs:   4px;
+    --radius-sm:   5px;
+    --radius-md:   8px;
+    --radius-lg:   6px;
+    --radius-pill: 100px;
+
+     
+    --sky-lift: 0;         
+    --horizon-opacity: 0;  
+    --horizon-hue: 55;
+
+     
+    --void:      oklch(8%  0.020 258);
+    --bg:        oklch(11% 0.018 258);
+    --surface-1: oklch(15.5% 0.020 258);
+    --surface-2: oklch(19.5% 0.022 258);
+    --surface-3: oklch(24% 0.024 258);
+    --border:    oklch(30% 0.020 258);
+    --border-strong: oklch(40% 0.024 258);
+
+     
+    --glass-panel:   oklch(15.5% 0.02 258 / 0.86);
+    --glass-popover: oklch(13%   0.02 258 / 0.97);
+    --glass-hint:    oklch(15.5% 0.02 258 / 0.84);
+    --glass-blur: blur(18px) saturate(140%);
+
+     
+    --scene-ground-near:    #182238;
+    --scene-ground-mid:     #131c30;
+    --scene-ground-far:     #0a0f1c;
+    --scene-compass-accent: #e0b25a;
+    --scene-compass-muted:  #8b96b8;
+
+    --text:    oklch(96% 0.006 258);
+    --text-2:  oklch(78% 0.012 258);
+    --text-3:  oklch(64% 0.014 258);
+    --text-4:  oklch(59% 0.016 258);
+
+     
+    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-num: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+    --fs-2xs: 0.6875rem;
+    --fs-xs:  0.75rem;
+    --fs-sm:  0.8125rem;
+    --fs-md:  0.9375rem;
+    --fs-lg:  1.125rem;
+    --fs-value-sm: 1.375rem;
+    --fs-value-md: 1.875rem;
+    --fs-value-lg: 2.75rem;
+
+     
+    --sp-1: 0.25rem;
+    --sp-2: 0.5rem;
+    --sp-3: 0.75rem;
+    --sp-4: 1rem;
+    --sp-5: 1.5rem;
+    --sp-6: 2rem;
+    --sp-7: 3rem;
+
+     
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-fast: 150ms;
+    --dur-med:  240ms;
+    --dur-snap: 620ms;
+
+     
+    --z-scene: 0;
+    --z-chrome: 10;
+    --z-hint: 15;
+    --z-loading: 20;
+    --z-toast: 30;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family: var(--font-ui);
+    background: var(--void);
+    color: var(--text);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  img,svg{ display:block; max-width:100%; }
+  button{ font: inherit; color: inherit; }
+  input{ font: inherit; }
+
+  h1,h2,h3,p{ margin:0; }
+
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  :focus-visible{
+    outline: 2px solid var(--blue-soft);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+   
+
+  .app{
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 120% 90% at 50% 30%,
+        color-mix(in oklch, oklch(15% 0.03 258) calc(100% - var(--sky-lift) * 100%), oklch(62% 0.12 232) calc(var(--sky-lift) * 100%)) 0%,
+        color-mix(in oklch, var(--void) calc(100% - var(--sky-lift) * 100%), oklch(85% 0.045 214) calc(var(--sky-lift) * 100%)) 65%);
+  }
+  .app::before{
+    content:"";
+    position:absolute; inset:0;
+    z-index: 0;
+    pointer-events:none;
+    opacity: clamp(0, calc(1 - var(--sky-lift) * 1.35), 1);
+    transition: opacity var(--dur-snap) var(--ease-out-quart);
+    background:
+      radial-gradient(1px 1px at 8% 18%, rgba(255,255,255,.55), transparent),
+      radial-gradient(1px 1px at 22% 62%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 34% 12%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 46% 78%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 58% 30%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1.5px 1.5px at 68% 55%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 78% 20%, rgba(255,255,255,.35), transparent),
+      radial-gradient(1px 1px at 88% 70%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1.5px 1.5px at 94% 40%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1px 1px at 14% 88%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 62% 90%, rgba(255,255,255,.3), transparent),
+      radial-gradient(1px 1px at 40% 44%, rgba(255,255,255,.3), transparent);
+  }
+
+  .scene-wrap{
+    position:absolute; inset:0;
+    z-index: var(--z-scene);
+  }
+  #scene-canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    display:block;
+    cursor: grab;
+  }
+  #scene-canvas:active{ cursor: grabbing; }
+
+  .scene-horizon-glow{
+    position:absolute; left:0; right:0; top:34%; bottom:0;
+    background: radial-gradient(ellipse 34% 46% at 50% 46%, oklch(78% 0.14 var(--horizon-hue) / var(--horizon-opacity)), transparent 68%);
+    mask-image: linear-gradient(to top, black 0%, transparent 96%);
+    -webkit-mask-image: linear-gradient(to top, black 0%, transparent 96%);
+    pointer-events:none;
+    z-index: 1;
+  }
+
+  .scene-scrim-top{
+    position:absolute; top:0; left:0; right:0; height:200px;
+    background: linear-gradient(to bottom, oklch(8% 0.02 258 / 0.65), transparent);
+    pointer-events:none;
+    z-index: 1;
+  }
+  .scene-scrim-bottom{
+    position:absolute; bottom:0; left:0; right:0; height:260px;
+    background: linear-gradient(to top, oklch(8% 0.02 258 / 0.55), transparent);
+    pointer-events:none;
+    z-index: 1;
+  }
+
+   
+
+  .topbar{
+    position:absolute; top:0; left:0; right:0;
+    z-index: var(--z-chrome);
+    display:flex; align-items:center; justify-content:space-between;
+    gap: var(--sp-5);
+    padding: var(--sp-4) var(--sp-6);
+  }
+
+  .brand{ display:flex; align-items:center; gap: var(--sp-3); min-width:0; }
+  .brand-mark{
+    width: 34px; height: 34px; flex: none;
+    border-radius: var(--radius-sm);
+    background: var(--glass-panel);
+    border: 1px solid var(--border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 4px 14px oklch(0% 0 0 / 0.4);
+  }
+  .brand-mark svg, .brand-mark img{ width:20px; height:auto; }
+  .brand-text{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .brand-name{
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height:1.15;
+  }
+  .brand-sub{
+    font-size: var(--fs-2xs);
+    color: var(--text-3);
+    letter-spacing: 0.01em;
+  }
+
+  .topbar-controls{ display:flex; align-items:center; gap: var(--sp-4); }
+
+  .city-field{ position:relative; display:flex; }
+  .select-shell{ position:relative; }
+  #citySelect{
+    appearance:none;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: var(--radius-sm);
+    padding: 7px 32px 7px 12px;
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    min-width: 178px;
+    cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart);
+  }
+  #citySelect:hover{ border-color: var(--border-strong); background: var(--surface-2); }
+  .select-shell::after{
+    content:"";
+    position:absolute; right:11px; top:50%; translate: 0 -50%;
+    width:8px; height:8px;
+    border-right: 1.5px solid var(--text-3);
+    border-bottom: 1.5px solid var(--text-3);
+    transform: rotate(45deg) translateY(-3px);
+    pointer-events:none;
+  }
+
+  .legend{
+    display:flex; align-items:center; gap:2px;
+    padding: 4px;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .legend-chip{
+    display:flex; align-items:center;
+    padding: 6px 13px;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-2xs);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .legend-chip--gold{ color: var(--gold-soft); background: var(--surface-2); }
+  .legend-chip--blue{ color: var(--blue-soft); }
+
+   
+  .data-source-tag{ margin-left: 6px; }
+  .data-source-tag[hidden]{ display:none; }
+  .legend-chip--muted{ color: var(--text-3); background: var(--surface-2); }
+
+  .advanced-link{
+    display:flex; align-items:center; justify-content:center;
+    width: 34px; height: 34px; flex: none;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--violet-soft);
+    text-decoration: none;
+    transition: border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart);
+  }
+  .advanced-link:hover{ border-color: var(--border-strong); background: var(--surface-2); }
+  .advanced-link svg{ width:16px; height:16px; }
+
+  .date-nav{
+    position:absolute; top:50%; left:50%;
+    transform: translate(-50%, -50%);
+    display:flex; align-items:center; gap:2px;
+    padding: 5px 6px;
+    background: var(--glass-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+  }
+  .date-nav-arrow{
+    display:flex; align-items:center; justify-content:center;
+    width:26px; height:26px;
+    padding:0; margin:0; flex:none;
+    border:none; background:none;
+    border-radius:50%;
+    color: var(--text-3);
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-nav-arrow:hover:not(:disabled), .date-nav-arrow:focus-visible{ background: var(--surface-2); color: var(--text-2); }
+  .date-nav-arrow:disabled{ opacity:0.35; cursor:not-allowed; }
+  .date-nav-arrow svg{ width:15px; height:15px; }
+  .date-nav-label{
+    font-family: var(--font-num);
+    font-size: var(--fs-xs);
+    font-weight:600;
+    color: var(--text-2);
+    padding: 3px var(--sp-2);
+    margin: -3px 0;
+    white-space:nowrap;
+    font-variant-numeric: tabular-nums;
+    border:none; background:none;
+    border-radius: var(--radius-xs);
+    cursor:pointer;
+    transition: color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-nav-label:hover, .date-nav-label:focus-visible{ color: var(--text); background: var(--surface-2); }
+
+  .date-calendar{
+    position: fixed; margin:0; padding: var(--sp-3);
+    width: 264px;
+    background: var(--glass-popover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 32px oklch(0% 0 0 / 0.45);
+    color: var(--text);
+    opacity:0; transform: translateY(-4px) scale(0.98);
+    transition: opacity var(--dur-fast) var(--ease-out-quart), transform var(--dur-fast) var(--ease-out-quart), overlay var(--dur-fast) allow-discrete, display var(--dur-fast) allow-discrete;
+  }
+  .date-calendar:popover-open{ opacity:1; transform: translateY(0) scale(1); }
+  @starting-style{
+    .date-calendar:popover-open{ opacity:0; transform: translateY(-4px) scale(0.98); }
+  }
+  .date-cal-head{ display:flex; align-items:center; justify-content:space-between; gap: var(--sp-2); margin-bottom: var(--sp-3); min-height:26px; }
+  .date-cal-title-group{ display:flex; align-items:baseline; gap:6px; }
+  .date-cal-title-part{
+    font: inherit;
+    font-size: var(--fs-sm); font-weight:600; letter-spacing:-0.005em;
+    color: var(--text);
+    background:none; border:none;
+    padding: 2px 5px; margin: -2px -5px;
+    border-radius: var(--radius-xs);
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-cal-title-part:hover, .date-cal-title-part:focus-visible{ background: var(--surface-2); color: var(--gold-soft); }
+  .date-cal-title-static{ font-size: var(--fs-sm); font-weight:600; letter-spacing:-0.005em; color: var(--text-3); }
+  .date-cal-nav{
+    display:flex; align-items:center; justify-content:center;
+    width:26px; height:26px; flex:none;
+    border:none; background:none;
+    border-radius:50%;
+    color: var(--text-3);
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-cal-nav:hover:not(:disabled), .date-cal-nav:focus-visible{ background: var(--surface-2); color: var(--text-2); }
+  .date-cal-nav:disabled{ opacity:0.3; cursor:not-allowed; }
+  .date-cal-nav.is-spacer{ visibility:hidden; }
+  .date-cal-nav svg{ width:14px; height:14px; }
+  .date-cal-weekdays, .date-cal-grid{ display:grid; grid-template-columns: repeat(7, 1fr); }
+  .date-cal-weekdays{ margin-bottom: 2px; }
+  .date-cal-weekdays[hidden]{ display:none; }
+  .date-cal-weekdays span{
+    display:flex; align-items:center; justify-content:center;
+    height:24px;
+    font-size: var(--fs-2xs); font-weight:600; color: var(--text-4);
+  }
+  .date-cal-day{
+    display:flex; align-items:center; justify-content:center;
+    aspect-ratio: 1; margin:1px;
+    border:none; background:none;
+    border-radius:50%;
+    font-family: var(--font-num);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2);
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-cal-day:hover:not(:disabled){ background: var(--surface-2); color: var(--text); }
+  .date-cal-day:focus-visible{ outline-offset:0; }
+  .date-cal-day.is-outside{ color: var(--text-4); }
+  .date-cal-day.is-today{ color: var(--gold-soft); font-weight:600; }
+  .date-cal-day.is-selected{ background: var(--blue-soft); color: var(--void); font-weight:600; }
+  .date-cal-day.is-selected:hover{ background: var(--blue-soft); }
+  .date-cal-day:disabled{ color: var(--text-4); opacity:0.35; cursor:not-allowed; }
+  .date-cal-grid--months{ grid-template-columns: repeat(3, 1fr); gap:4px; }
+  .date-cal-grid--years{ grid-template-columns: repeat(5, 1fr); gap:4px; }
+  .date-cal-month, .date-cal-year{
+    display:flex; align-items:center; justify-content:center;
+    height:40px;
+    border:none; background:none;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-xs); font-weight:500;
+    color: var(--text-2);
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-cal-year{ font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  .date-cal-month:hover:not(:disabled), .date-cal-year:hover:not(:disabled){ background: var(--surface-2); color: var(--text); }
+  .date-cal-month:focus-visible, .date-cal-year:focus-visible{ outline-offset:0; }
+  .date-cal-month.is-today, .date-cal-year.is-today{ color: var(--gold-soft); font-weight:600; }
+  .date-cal-month.is-selected, .date-cal-year.is-selected{ background: var(--blue-soft); color: var(--void); font-weight:600; }
+  .date-cal-month.is-selected:hover, .date-cal-year.is-selected:hover{ background: var(--blue-soft); }
+  .date-cal-month:disabled, .date-cal-year:disabled{ color: var(--text-4); opacity:0.35; cursor:not-allowed; }
+
+  .date-cal-footer{ margin-top: var(--sp-2); padding-top: var(--sp-2); border-top: 1px solid var(--border); display:flex; justify-content:center; }
+  .date-cal-today-btn{
+    padding: 5px 12px;
+    border:none; background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-xs); font-weight:600; color: var(--blue-soft);
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart);
+  }
+  .date-cal-today-btn:hover{ background: var(--surface-3); }
+
+   
+
+  .readout-dock{
+    position:absolute; top: calc(var(--topbar-h, 84px) + var(--sp-3)); right: var(--sp-6);
+    z-index: var(--z-chrome);
+    width: 316px;
+    max-height: calc(100vh - var(--topbar-h, 84px) - var(--sp-3) - var(--sp-5));
+    max-height: calc(100dvh - var(--topbar-h, 84px) - var(--sp-3) - var(--sp-5));
+    overflow-y: auto;
+    scrollbar-width: thin;
+    display:flex; flex-direction:column; gap: var(--sp-3);
+  }
+  .readout-dock::-webkit-scrollbar{ width:6px; }
+  .readout-dock::-webkit-scrollbar-thumb{ background: var(--border-strong); border-radius: var(--radius-xs); }
+
+
+  .backend-status-notice{
+    display:flex; align-items:center; gap: var(--sp-2);
+    padding: 8px var(--sp-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-1);
+    color: var(--text-3);
+    font-size: var(--fs-2xs);
+    line-height:1.4;
+  }
+  .backend-status-notice[hidden]{ display:none; }
+  .backend-status-dot{
+    width:6px; height:6px; flex:none;
+    border-radius:50%;
+    background: var(--text-4);
+    animation: backendStatusPulse 2.2s ease-in-out infinite;
+  }
+  @keyframes backendStatusPulse{
+    0%, 100%{ opacity:0.4; }
+    50%{ opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .backend-status-dot{ animation:none; }
+  }
+
+  .panel-block{
+    background: var(--glass-panel);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--sp-4);
+  }
+
+  .compare-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3);
+  }
+  .metric{
+    display:flex; flex-direction:column; gap:2px;
+    padding: var(--sp-1) 0;
+  }
+  .metric-label{
+    display:flex; align-items:center; gap:6px;
+    font-size: var(--fs-2xs);
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+  }
+  .metric-label i{ width:6px; height:6px; border-radius:50%; flex:none; }
+  .metric--gold .metric-label i{ background: var(--gold); }
+  .metric--blue .metric-label i{ background: var(--blue); }
+  .metric-value{
+    font-family: var(--font-num);
+    font-weight: 600;
+    font-size: var(--fs-value-lg);
+    line-height:1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+    transition: color var(--dur-med) var(--ease-out-quart);
+  }
+  .metric--gold .metric-value{ color: var(--gold-soft); text-shadow: 0 0 22px color-mix(in oklch, var(--gold) 35%, transparent); }
+  .metric--blue .metric-value{ color: var(--blue-soft); text-shadow: 0 0 22px color-mix(in oklch, var(--blue) 35%, transparent); }
+
+  .loss-banner{
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--border);
+    font-size: var(--fs-sm);
+    color: var(--text-2);
+    line-height:1.45;
+  }
+  .loss-banner strong{
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .loss-banner.is-matched strong{ color: var(--gold-soft); }
+
+  .chart-head{ display:flex; align-items:baseline; justify-content:space-between; gap: var(--sp-2); margin-bottom: var(--sp-2); }
+  #powerChart{ width:100%; height:auto; overflow: visible; }
+  .chart-now-dot{ transition: cx var(--dur-fast) linear; }
+  #chartHoverTarget{ cursor: crosshair; }
+  .chart-hover-dot{ pointer-events:none; }
+
+  .chart-tooltip{
+    display:flex; align-items:center; gap:3px; flex:none;
+    font-family: var(--font-num);
+    font-size: var(--fs-2xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--text-3);
+    opacity:0;
+    transition: opacity var(--dur-fast) var(--ease-out-quart);
+  }
+  .chart-tooltip.is-visible{ opacity:1; }
+  .chart-tooltip-time{ color: var(--text-2); margin-right:2px; }
+  .chart-tooltip-dot{ width:6px; height:6px; border-radius:50%; margin-left:5px; flex:none; }
+  .chart-tooltip-dot--gold{ background: var(--gold); }
+  .chart-tooltip-dot--blue{ background: var(--blue); }
+  .chart-tooltip-rec{ color: var(--gold-soft); }
+  .chart-tooltip-user{ color: var(--blue-soft); }
+
+  .facts-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sp-3) var(--sp-4);
+  }
+  .fact{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .fact-label{
+    font-size: var(--fs-2xs);
+    color: var(--text-4);
+    letter-spacing: 0.01em;
+  }
+
+  .info-trigger{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:6px;
+    margin: -6px -6px -6px -3px;
+    border:none; background:none;
+    color: var(--text-4); cursor:pointer; border-radius:50%;
+    vertical-align:-1px;
+    transition: color var(--dur-fast) var(--ease-out-quart);
+  }
+  .info-trigger:hover, .info-trigger:focus-visible{ color: var(--text-2); }
+  .info-trigger svg{ width:13px; height:13px; }
+
+  .glossary-popover{
+    position: fixed; margin:0; padding:10px 12px;
+    max-width: 230px;
+    background: var(--glass-popover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 12px 32px oklch(0% 0 0 / 0.45);
+    font-size: var(--fs-xs);
+    line-height:1.5;
+    color: var(--text-2);
+    opacity:0; transform: translateY(-4px) scale(0.98);
+    transition: opacity var(--dur-fast) var(--ease-out-quart), transform var(--dur-fast) var(--ease-out-quart), overlay var(--dur-fast) allow-discrete, display var(--dur-fast) allow-discrete;
+  }
+  .glossary-popover:popover-open{ opacity:1; transform: translateY(0) scale(1); }
+  @starting-style{
+    .glossary-popover:popover-open{ opacity:0; transform: translateY(-4px) scale(0.98); }
+  }
+
+  .fact-value{
+    font-family: var(--font-num);
+    font-size: var(--fs-value-sm);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    line-height:1.15;
+  }
+  .fact-value--gold{ color: var(--gold-soft); }
+  .fact-value--blue{ color: var(--blue-soft); }
+  .fact-value--loss{ color: var(--loss-soft); }
+  .fact-value--loss.is-matched{ color: var(--gold-soft); }
+  .fact-sub{ font-size: var(--fs-2xs); color: var(--text-3); font-family: var(--font-ui); }
+  .fact.span-2{ grid-column: 1 / -1; }
+
+   
+
+  .instrument-dock{
+    position:absolute; left:50%; bottom: var(--sp-5);
+    translate: -50% 0;
+    z-index: var(--z-chrome);
+    width: min(850px, calc(100vw - 48px));
+    background: var(--glass-panel);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-4) var(--sp-5);
+    display:flex; align-items:center; gap: var(--sp-5);
+  }
+
+  .instrument-row{
+    flex: 1;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-5);
+    min-width: 0;
+  }
+
+  .slider-control{ display:flex; flex-direction:column; gap: var(--sp-2); min-width:0; }
+  .slider-head{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .slider-head label{
+    font-size: var(--fs-2xs);
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+    white-space:nowrap;
+  }
+  .value-swap{ position:relative; display:inline-flex; align-items:center; }
+  .value-display, .value-input{
+    font-family: var(--font-num);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space:nowrap;
+  }
+  .value-display{
+    border:none; background:none;
+    padding: 5px 2px;
+    margin: -5px -2px;
+    color: var(--text); cursor:pointer;
+    border-radius: var(--radius-xs);
+    transition: color var(--dur-fast) var(--ease-out-quart);
+  }
+  .value-display:hover, .value-display:focus-visible{ color: var(--gold-soft); }
+  .value-input{
+    -moz-appearance: textfield;
+    width: 4.5em; border:none; background:none; padding:0; margin:0;
+    color: var(--gold-soft); text-align:right;
+  }
+  .value-input::-webkit-inner-spin-button,
+  .value-input::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+  .value-input[hidden]{ display:none; }
+  .value-input.is-invalid{
+    color: var(--danger-soft);
+    outline: 1.5px solid var(--danger);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+  .value-input-error{
+    position:absolute; top: calc(100% + 6px); right:0;
+    z-index: var(--z-toast);
+    padding: 4px 8px;
+    background: var(--glass-popover);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-xs);
+    font-family: var(--font-ui); font-size: var(--fs-2xs); font-weight:500;
+    color: var(--danger-soft);
+    white-space:nowrap;
+  }
+
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none;
+    width:100%; height: 28px;
+    background:transparent;
+    margin:0;
+  }
+  input[type="range"]::-webkit-slider-runnable-track{
+    height:4px; border-radius:2px;
+    background: var(--surface-3);
+  }
+  input[type="range"]::-moz-range-track{
+    height:4px; border-radius:2px;
+    background: var(--surface-3);
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:16px; height:16px; margin-top:-6px;
+    border-radius:50%;
+    background: var(--blue-soft);
+    border: 2px solid oklch(11% 0.018 258);
+    box-shadow: 0 0 0 1px var(--blue), 0 2px 6px oklch(0% 0 0 / 0.5);
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-out-quart);
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:16px; height:16px; border-radius:50%;
+    background: var(--blue-soft);
+    border: 2px solid oklch(11% 0.018 258);
+    box-shadow: 0 0 0 1px var(--blue), 0 2px 6px oklch(0% 0 0 / 0.5);
+    cursor: pointer;
+  }
+  input[type="range"]:hover::-webkit-slider-thumb{ transform: scale(1.12); }
+  input[type="range"]:active::-webkit-slider-thumb{ transform: scale(0.96); }
+  input[type="range"]:focus-visible{ outline:none; }
+  input[type="range"]:focus-visible::-webkit-slider-thumb{
+    outline: 2px solid var(--blue-soft);
+    outline-offset: 3px;
+  }
+  #timeSlider::-webkit-slider-thumb{ background: var(--gold-soft); box-shadow: 0 0 0 1px var(--gold), 0 2px 6px oklch(0% 0 0 / 0.5); }
+  #timeSlider::-moz-range-thumb{ background: var(--gold-soft); box-shadow: 0 0 0 1px var(--gold), 0 2px 6px oklch(0% 0 0 / 0.5); }
+  #timeSlider:focus-visible::-webkit-slider-thumb{ outline-color: var(--gold-soft); }
+
+  .dock-divider{ width:1px; align-self:stretch; background: var(--border); flex:none; }
+
+  .match-btn{
+    flex: none;
+    display:flex; align-items:center; gap:8px;
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in oklch, var(--gold) 40%, transparent);
+    background: linear-gradient(160deg, color-mix(in oklch, var(--gold), black 55%) 0%, color-mix(in oklch, var(--gold), black 74%) 100%);
+    color: var(--gold-soft);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    cursor: pointer;
+    transition: transform var(--dur-fast) var(--ease-out-quart), border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart);
+    white-space: nowrap;
+  }
+  .match-btn:hover{
+    border-color: color-mix(in oklch, var(--gold) 75%, transparent);
+    background: linear-gradient(160deg, color-mix(in oklch, var(--gold), black 48%) 0%, color-mix(in oklch, var(--gold), black 68%) 100%);
+    transform: translateY(-1px);
+  }
+  .match-btn:active{ transform: translateY(0); }
+  .match-btn:disabled{
+    opacity:0.45; cursor:default; transform:none;
+  }
+  .match-btn svg{ width:15px; height:15px; flex:none; }
+  .match-btn.is-pulse{ animation: matchPulse 900ms var(--ease-out-quart); }
+  @keyframes matchPulse{
+    0%{ box-shadow: 0 0 0 0 color-mix(in oklch, var(--gold) 55%, transparent); }
+    100%{ box-shadow: 0 0 0 16px transparent; }
+  }
+
+  .settings-btn{
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-3);
+    cursor:pointer;
+    transition: border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .settings-btn:hover, .settings-btn:focus-visible{ border-color: var(--border-strong); background: var(--surface-3); color: var(--text-2); }
+  .settings-btn svg{ width:17px; height:17px; }
+
+  .reset-btn{
+    flex:none;
+    display:flex; align-items:center; justify-content:center;
+    width:44px; height:44px;
+    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in oklch, var(--blue) 30%, var(--border));
+    background: var(--surface-2);
+    color: var(--blue-soft);
+    cursor:pointer;
+    transition: transform var(--dur-fast) var(--ease-out-quart), border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart);
+  }
+  .reset-btn:hover{
+    border-color: color-mix(in oklch, var(--blue) 60%, transparent);
+    background: var(--surface-3);
+    transform: translateY(-1px);
+  }
+  .reset-btn:active{ transform: translateY(0); }
+  .reset-btn:disabled{ opacity:0.45; cursor:default; transform:none; }
+  .reset-btn svg{ width:16px; height:16px; }
+  .reset-btn.is-pulse{ animation: resetPulse 900ms var(--ease-out-quart); }
+  @keyframes resetPulse{
+    0%{ box-shadow: 0 0 0 0 color-mix(in oklch, var(--blue) 55%, transparent); }
+    100%{ box-shadow: 0 0 0 16px transparent; }
+  }
+
+
+
+  .setup-modal{
+    position:relative;
+    margin:auto; padding:0; border:none;
+    width: min(380px, calc(100vw - 48px));
+    max-height: calc(100dvh - 48px);
+    background: var(--glass-popover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-radius: var(--radius-md);
+    box-shadow: 0 24px 64px oklch(0% 0 0 / 0.55);
+    color: var(--text);
+  }
+  .setup-modal::backdrop{
+    background: oklch(6% 0.01 258 / 0.72);
+    backdrop-filter: blur(2px);
+  }
+  .setup-modal-form{
+    display:flex; flex-direction:column;
+    padding: var(--sp-6);
+  }
+  .setup-modal-title{
+    font-size: var(--fs-lg);
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+
+  .setup-modal-close{
+    position:absolute; top: var(--sp-3); right: var(--sp-3);
+    display:flex; align-items:center; justify-content:center;
+    width:30px; height:30px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--text-2);
+    cursor:pointer;
+    transition: border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart);
+  }
+  .setup-modal-close:hover, .setup-modal-close:focus-visible{ border-color: var(--border-strong); background: var(--surface-3); color: var(--text); }
+  .setup-modal-close svg{ width:14px; height:14px; }
+  .setup-modal-sub{
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    line-height:1.5;
+    margin: var(--sp-2) 0 var(--sp-4);
+  }
+  .setup-modal-field{
+    display:flex; flex-direction:column; gap:6px;
+    margin-bottom: var(--sp-4);
+  }
+  .setup-modal-field label{
+    display:flex; align-items:baseline; justify-content:space-between; gap: var(--sp-2);
+    font-size: var(--fs-sm); font-weight:500; color: var(--text-2);
+  }
+  .setup-modal-hint{ font-size: var(--fs-2xs); font-weight:400; color: var(--text-4); }
+  .setup-modal-field input{
+    font-family: var(--font-num);
+    font-size: var(--fs-md);
+    font-weight:600;
+    color: var(--blue-soft);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    -moz-appearance: textfield;
+  }
+  .setup-modal-field input:focus-visible{
+    outline: none;
+    border-color: var(--blue);
+  }
+  .setup-modal-field input::-webkit-inner-spin-button,
+  .setup-modal-field input::-webkit-outer-spin-button{ -webkit-appearance:none; margin:0; }
+  .setup-modal-field input.is-invalid{
+    border-color: var(--danger);
+    color: var(--danger-soft);
+  }
+  .setup-modal-error{
+    font-size: var(--fs-xs);
+    color: var(--danger-soft);
+    margin: -6px 0 var(--sp-3);
+  }
+  .setup-modal-actions{
+    display:flex; justify-content:flex-end; gap: var(--sp-3);
+  }
+  .setup-modal-cancel{
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: none;
+    color: var(--text-2);
+    font: inherit; font-size: var(--fs-sm); font-weight:500;
+    cursor:pointer;
+    transition: background var(--dur-fast) var(--ease-out-quart);
+  }
+  .setup-modal-cancel:hover{ background: var(--surface-2); }
+  .setup-modal-save{
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    border: 1px solid color-mix(in oklch, var(--blue) 40%, transparent);
+    background: linear-gradient(160deg, color-mix(in oklch, var(--blue), black 55%) 0%, color-mix(in oklch, var(--blue), black 74%) 100%);
+    color: var(--blue-soft);
+    font: inherit; font-size: var(--fs-sm); font-weight:600;
+    cursor:pointer;
+    transition: transform var(--dur-fast) var(--ease-out-quart), border-color var(--dur-fast) var(--ease-out-quart);
+  }
+  .setup-modal-save:hover{ border-color: color-mix(in oklch, var(--blue) 75%, transparent); transform: translateY(-1px); }
+  .setup-modal-save:active{ transform: translateY(0); }
+
+   
+
+  .camera-hint{
+    position:absolute; bottom: 132px; left:50%;
+    translate: -50% 0;
+    z-index: var(--z-hint);
+    display:flex; align-items:center; gap:8px;
+    padding: 8px 15px;
+    background: var(--glass-hint);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    color: var(--text-2);
+    pointer-events:none;
+    opacity:1;
+    box-shadow: 0 4px 14px oklch(0% 0 0 / 0.35);
+    transition: opacity var(--dur-med) var(--ease-out-quart);
+  }
+  .camera-hint svg{ width:15px; height:15px; }
+  .camera-hint.is-hidden{ opacity:0; }
+
+   
+  .scene-fallback{
+    position:absolute; top:50%; left:50%;
+    translate: -50% -50%;
+    z-index: var(--z-hint);
+    max-width: min(320px, calc(100vw - 64px));
+    padding: 10px 16px;
+    background: var(--glass-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-sm);
+    color: var(--text-2);
+    line-height:1.5;
+    text-align:center;
+    pointer-events:none;
+  }
+  .scene-fallback[hidden]{ display:none; }
+
+   
+
+  .scene-loading{
+    position:absolute; inset:0;
+    z-index: var(--z-loading);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap: var(--sp-4);
+    background: var(--void);
+    transition: opacity 420ms var(--ease-out-quart);
+  }
+  .scene-loading.is-hidden{ opacity:0; pointer-events:none; }
+
+  @keyframes shimmer{
+    0%{ background-position: 200% 0; }
+    100%{ background-position: -200% 0; }
+  }
+
+  .loading-mark-row{ display:flex; align-items:center; gap: var(--sp-4); }
+  .loading-mark{ width: 72px; height: 72px; flex:none; overflow: visible; }
+  .loading-mark-shapes{ animation: mark-skel-pulse 1.6s ease-in-out infinite; }
+  @keyframes mark-skel-pulse{
+    0%, 100%{ opacity: 0.4; }
+    50%{ opacity: 1; }
+  }
+  .loading-wordmark-skel{ width: 118px; }
+
+  .loading-caption{
+    font-size: var(--fs-sm);
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+  }
+
+  .skel-bar{
+    display:block;
+    height: 0.9em;
+    border-radius: var(--radius-xs);
+    background: linear-gradient(100deg, var(--surface-2) 30%, var(--surface-3) 50%, var(--surface-2) 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  .is-loading-dock .metric-value,
+  .is-loading-dock .fact-value{ visibility:hidden; position:relative; }
+  .is-loading-dock .metric-value::after,
+  .is-loading-dock .fact-value::after{
+    content:"";
+    visibility:visible;
+    position:absolute; inset: 10% 15% 10% 0;
+    border-radius: var(--radius-xs);
+    background: linear-gradient(100deg, var(--surface-2) 30%, var(--surface-3) 50%, var(--surface-2) 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+
+   
+
+  @media (max-width: 980px){
+    .readout-dock{ width: 264px; }
+    .instrument-row{ gap: var(--sp-4); }
+    .topbar{ padding: var(--sp-3) var(--sp-4); }
+    .fact-value{ font-size: var(--fs-md); }
+  }
+
+  @media (max-width: 820px){
+    .readout-dock{
+      top: calc(var(--topbar-h, 108px) + var(--sp-3)); bottom: calc(var(--instrument-dock-h, 292px) + var(--sp-3) + var(--sp-3)); right: var(--sp-4); left: var(--sp-4);
+      width:auto; max-height: none;
+      flex-direction:row; flex-wrap:wrap;
+    }
+    .panel-block{ flex:1; min-width: 240px; }
+    .instrument-dock{
+      flex-direction:column; align-items:stretch;
+      bottom: var(--sp-3); width: calc(100vw - 32px);
+    }
+    .instrument-row{ grid-template-columns:1fr; gap: var(--sp-3); }
+    .dock-divider{ display:none; }
+    .settings-btn, .reset-btn{ align-self:center; }
+    .match-btn{ justify-content:center; }
+    .legend{ display:none; }
+
+    .topbar{ flex-wrap:wrap; row-gap: var(--sp-3); }
+    .brand{ flex: 1 1 100%; }
+    .topbar-controls{ flex: 1 1 100%; justify-content:flex-start; }
+    .date-nav{ position:static; transform:none; flex:0 1 auto; margin-inline:auto; order:2; }
+    #citySelect{ min-width:0; flex:1; }
+    .select-shell{ flex:1; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <h1 class="sr-only">Orientation Studio — solar panel orientation for Malaysian cities</h1>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <img src="favicon/apolius-favicon.svg" alt="">
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Orientation Studio</span>
+        <span class="brand-sub">Apolius</span>
+      </div>
+    </div>
+    <div class="date-nav" id="dateNav" role="group" aria-label="Change date">
+      <button class="date-nav-arrow" type="button" id="dateNavPrev" aria-label="Previous day">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="date-nav-label" id="dateNavLabel" aria-label="Choose a date" aria-haspopup="dialog" popovertarget="dateCalendar"></button>
+      <button class="date-nav-arrow" type="button" id="dateNavNext" aria-label="Next day">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <span class="legend-chip data-source-tag" id="dataSourceTag" hidden></span>
+    <div class="topbar-controls">
+      <div class="legend" aria-hidden="true">
+        <span class="legend-chip legend-chip--gold">Recommended</span>
+        <span class="legend-chip legend-chip--blue">Your setup</span>
+      </div>
+      <div class="city-field">
+        <label class="sr-only" for="citySelect">City</label>
+        <div class="select-shell">
+          <select id="citySelect"></select>
+        </div>
+      </div>
+      <a class="advanced-link" href="model-metrics.html" aria-label="Model metrics" title="Model metrics">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V10M10 19V5M16 19v-7M22 19H2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <script>
+  if (new URLSearchParams(location.search).get('embed') === 'scroll-preview') {
+    const metricsLink = document.querySelector('.advanced-link');
+    if (metricsLink) {
+      metricsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.parent.postMessage({ type: 'apolius:scroll-to-metrics' }, '*');
+      });
+    }
+  }
+  </script>
+
+  <main>
+  <div class="scene-wrap">
+    <canvas id="scene-canvas" role="img" aria-label="3D scene comparing your solar panel's orientation (blue) against the recommended orientation (gold), with a live sun position"></canvas>
+    <div class="scene-horizon-glow" aria-hidden="true"></div>
+    <div class="scene-scrim-top" aria-hidden="true"></div>
+    <div class="scene-scrim-bottom" aria-hidden="true"></div>
+    <div class="scene-fallback" id="sceneFallback" hidden>
+      3D preview isn't available in this browser. The numbers and chart below are still fully live.
+    </div>
+  </div>
+
+  <aside class="readout-dock" id="readoutDock" aria-label="Live orientation readouts">
+    <p class="backend-status-notice" id="backendStatusNotice" role="status" hidden>
+      <span class="backend-status-dot" aria-hidden="true"></span>
+      Backend not connected &middot; showing preview data below
+    </p>
+    <div class="panel-block is-loading-dock" id="compareBlock">
+      <div class="compare-row">
+        <div class="metric metric--gold">
+          <span class="metric-label"><i></i>Recommended output</span>
+          <span class="metric-value" id="recOutput">—</span>
+        </div>
+        <div class="metric metric--blue">
+          <span class="metric-label"><i></i>Your output</span>
+          <span class="metric-value" id="userOutput">—</span>
+        </div>
+      </div>
+      <p class="loss-banner" id="lossBanner">Calculating potential yield…</p>
+    </div>
+
+    <div class="panel-block chart-block is-loading-dock" id="chartBlock">
+      <div class="chart-head">
+        <span class="metric-label">Power across the day</span>
+        <span class="chart-tooltip" id="chartTooltip" aria-live="polite">
+          <span class="chart-tooltip-time" id="chartTooltipTime">—</span>
+          <span class="chart-tooltip-dot chart-tooltip-dot--gold"></span><span class="chart-tooltip-rec" id="chartTooltipRec">—</span>
+          <span class="chart-tooltip-dot chart-tooltip-dot--blue"></span><span class="chart-tooltip-user" id="chartTooltipUser">—</span>
+        </span>
+      </div>
+      <svg id="powerChart" viewBox="0 0 284 108" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="18" y1="8" x2="18" y2="80" stroke="var(--border)" stroke-width="1"></line>
+        <line x1="18" y1="80" x2="276" y2="80" stroke="var(--border)" stroke-width="1"></line>
+        <path id="chartAreaRec" fill="color-mix(in oklch, var(--gold) 14%, transparent)" stroke="none"></path>
+        <path id="chartAreaUser" fill="color-mix(in oklch, var(--blue) 14%, transparent)" stroke="none"></path>
+        <path id="chartLineRec" fill="none" stroke="var(--gold)" stroke-width="1.8" stroke-linecap="round"></path>
+        <path id="chartLineUser" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-linecap="round"></path>
+        <line id="chartNowLine" x1="18" y1="8" x2="18" y2="80" stroke="var(--text-3)" stroke-width="1" stroke-dasharray="2 3"></line>
+        <circle id="chartNowDotRec" class="chart-now-dot" r="3" fill="var(--gold)"></circle>
+        <circle id="chartNowDotUser" class="chart-now-dot" r="3" fill="var(--blue)"></circle>
+        <text x="18" y="98" fill="var(--text-4)" font-size="9" font-family="Inter, sans-serif">0</text>
+        <text x="83" y="98" fill="var(--text-4)" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">6</text>
+        <text x="147" y="98" fill="var(--text-4)" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">12</text>
+        <text x="211" y="98" fill="var(--text-4)" font-size="9" font-family="Inter, sans-serif" text-anchor="middle">18</text>
+        <text x="276" y="98" fill="var(--text-4)" font-size="9" font-family="Inter, sans-serif" text-anchor="end">24</text>
+        <line id="chartHoverLine" x1="18" y1="8" x2="18" y2="80" stroke="var(--border-strong)" stroke-width="1" opacity="0"></line>
+        <circle id="chartHoverDotRec" class="chart-hover-dot" r="3" fill="var(--gold)" opacity="0"></circle>
+        <circle id="chartHoverDotUser" class="chart-hover-dot" r="3" fill="var(--blue)" opacity="0"></circle>
+        <rect id="chartHoverTarget" x="18" y="0" width="258" height="108" fill="transparent"></rect>
+      </svg>
+    </div>
+
+    <div class="panel-block is-loading-dock" id="factsBlock">
+      <div class="facts-grid">
+        <div class="fact">
+          <span class="fact-label">Sun elevation</span>
+          <span class="fact-value" id="sunElevation">—</span>
+        </div>
+        <div class="fact">
+          <span class="fact-label">Predicted Power
+            <button class="info-trigger" type="button" data-term="ghi" aria-label="What is GHI?">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 7.5v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </span>
+          <span class="fact-value" id="ghiVal">—</span>
+        </div>
+        <div class="fact">
+          <span class="fact-label">Optimal tilt
+            <button class="info-trigger" type="button" data-term="tilt" aria-label="What is tilt?">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 7.5v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </span>
+          <span class="fact-value fact-value--gold" id="optTilt">—</span>
+        </div>
+        <div class="fact">
+          <span class="fact-label">Optimal azimuth
+            <button class="info-trigger" type="button" data-term="azimuth" aria-label="What is azimuth?">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 7.5v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </span>
+          <span class="fact-value fact-value--gold" id="optAz">—</span>
+        </div>
+        <div class="fact">
+          <span class="fact-label">Annual yield · recommended
+            <button class="info-trigger" type="button" data-term="yield" aria-label="What does kWh/kWp mean?">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 7.5v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </button>
+          </span>
+          <span class="fact-value fact-value--gold" id="recYield">—</span>
+        </div>
+        <div class="fact">
+          <span class="fact-label">Annual yield · yours</span>
+          <span class="fact-value fact-value--blue" id="userYield">—</span>
+        </div>
+        <div class="fact span-2">
+          <span class="fact-label">Effective loss of energy potential</span>
+          <span class="fact-value fact-value--loss" id="lossYield">—</span>
+          <span class="fact-sub" id="lossYieldSub"></span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="glossary-popover" id="glossaryPopover" popover="auto" role="tooltip"></div>
+
+
+  <div class="date-calendar" id="dateCalendar" popover="auto" role="dialog" aria-label="Choose a date">
+    <div class="date-cal-head" id="dateCalHead"></div>
+    <div class="date-cal-weekdays" id="dateCalWeekdays" aria-hidden="true">
+      <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+    </div>
+    <div class="date-cal-grid" id="dateCalGrid"></div>
+    <div class="date-cal-footer">
+      <button type="button" class="date-cal-today-btn" id="dateCalTodayBtn">Today</button>
+    </div>
+  </div>
+
+
+  <dialog class="setup-modal" id="setupModal" aria-labelledby="setupModalTitle">
+    <form class="setup-modal-form" id="setupModalForm" novalidate>
+      <button type="button" class="setup-modal-close" id="setupModalClose" hidden aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+      <h2 class="setup-modal-title" id="setupModalTitle">Set up your panel</h2>
+      <p class="setup-modal-sub">How is your solar panel actually mounted? This is compared against the recommended orientation for your city. You can change it anytime from the gear icon in the dock below.</p>
+
+      <div class="setup-modal-field">
+        <label for="setupTilt">Tilt <span class="setup-modal-hint">0° flat, 90° vertical</span></label>
+        <input type="number" id="setupTilt" min="0" max="90" step="1" inputmode="decimal" required>
+      </div>
+      <div class="setup-modal-field">
+        <label for="setupAz">Azimuth <span class="setup-modal-hint">0° North, 180° South</span></label>
+        <input type="number" id="setupAz" min="0" max="360" step="1" inputmode="decimal" required>
+      </div>
+      <p class="setup-modal-error" id="setupModalError" role="alert" hidden></p>
+
+      <div class="setup-modal-actions">
+        <button type="button" class="setup-modal-cancel" id="setupModalCancel" hidden>Cancel</button>
+        <button type="submit" class="setup-modal-save" id="setupModalSave">Save panel setup</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  <div class="sr-only" id="liveStatus" aria-live="polite" aria-atomic="true"></div>
+
+  <section class="instrument-dock" id="instrumentDock" aria-label="Panel orientation controls">
+    <button class="settings-btn" id="settingsFab" type="button" title="Panel setup" aria-label="Edit your panel setup">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h6M14 7h6M4 17h10M18 17h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="10" cy="7" r="2" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="17" r="2" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+    <div class="dock-divider" aria-hidden="true"></div>
+    <div class="instrument-row">
+      <div class="slider-control">
+        <div class="slider-head">
+          <label for="timeSlider">Time of day</label>
+          <span class="value-swap">
+            <button type="button" class="value-display" id="timeValue" aria-label="Edit time of day">—</button>
+            <input type="text" inputmode="decimal" class="value-input" id="timeValueInput" hidden aria-label="Time of day. Type as H:MM, like 17:15, or decimal hours like 17.25">
+          </span>
+        </div>
+        <input type="range" id="timeSlider" min="0" max="24" step="0.25" value="17">
+      </div>
+      <div class="slider-control">
+        <div class="slider-head">
+          <label for="tiltSlider">Your tilt</label>
+          <span class="value-swap">
+            <button type="button" class="value-display" id="tiltValue" aria-label="Edit tilt">—</button>
+            <input type="number" class="value-input" id="tiltValueInput" hidden min="0" max="60" step="1" aria-label="Tilt, in degrees">
+          </span>
+        </div>
+        <input type="range" id="tiltSlider" min="0" max="60" step="1" value="28">
+      </div>
+      <div class="slider-control">
+        <div class="slider-head">
+          <label for="azSlider">Your azimuth</label>
+          <span class="value-swap">
+            <button type="button" class="value-display" id="azValue" aria-label="Edit azimuth">—</button>
+            <input type="number" class="value-input" id="azValueInput" hidden min="0" max="359" step="1" aria-label="Azimuth, in degrees">
+          </span>
+        </div>
+        <input type="range" id="azSlider" min="0" max="359" step="1" value="110">
+      </div>
+    </div>
+    <div class="dock-divider" aria-hidden="true"></div>
+    <button class="reset-btn" id="resetToSetupBtn" type="button" title="Reset to your setup" aria-label="Reset sliders back to your saved panel setup">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4.5 9a8 8 0 0 1 14-3M19.5 15a8 8 0 0 1-14 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 2v4h-4M5.5 22v-4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="match-btn" id="matchBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4v9a3 3 0 0 0 6 0V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 4h4M13 4h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      Match recommended
+    </button>
+  </section>
+
+  <div class="camera-hint" id="cameraHint">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12c0-3 3.5-5 8-5s8 2 8 5-3.5 5-8 5-8-2-8-5Z" stroke="currentColor" stroke-width="1.4"/><path d="M9 17.5 7 21m8-3.5 2 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    Drag to orbit the scene
+  </div>
+
+  <div class="scene-loading" id="sceneLoading">
+    <div class="loading-mark-row">
+      <svg class="loading-mark" viewBox="0 0 200 200" aria-hidden="true">
+        <g class="loading-mark-shapes">
+          <path d="M100,38 L169.83,153.44 Q175,162 165,162 L35,162 Q25,162 30.18,153.44 Z" fill="var(--surface-3)" opacity="0.6"/>
+          <circle cx="100" cy="44" r="22" fill="var(--text-4)"/>
+          <rect x="15" y="180" width="170" height="20" rx="7" fill="var(--surface-3)"/>
+          <line x1="35" y1="190" x2="165" y2="190" stroke="var(--text-4)" stroke-width="3" stroke-linecap="round"/>
+          <line x1="100" y1="183" x2="100" y2="197" stroke="var(--text-4)" stroke-width="3" stroke-linecap="round"/>
+        </g>
+      </svg>
+      <span class="skel-bar loading-wordmark-skel" aria-hidden="true"></span>
+    </div>
+    <p class="loading-caption">Running orientation simulation…</p>
+  </div>
+  </main>
+
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+
+const API_BASE = 'http://localhost:8000';
+
+
+const CITIES = [
+  { name:'Kangar',           state:'Perlis',                 lat:6.44, ghi:5.0, tilt:8, az:180 },
+  { name:'Alor Setar',       state:'Kedah',                 lat:6.12, ghi:5.1, tilt:8, az:180 },
+  { name:'George Town',      state:'Penang',                lat:5.41, ghi:5.3, tilt:7, az:180 },
+  { name:'Kota Bharu',       state:'Kelantan',               lat:6.13, ghi:5.0, tilt:8, az:175 },
+  { name:'Ipoh',             state:'Perak',                  lat:4.60, ghi:5.4, tilt:6, az:182 },
+  { name:'Kuala Terengganu', state:'Terengganu',             lat:5.33, ghi:5.2, tilt:7, az:178 },
+  { name:'Kuantan',          state:'Pahang',                 lat:3.82, ghi:5.5, tilt:5, az:183 },
+  { name:'Shah Alam',        state:'Selangor',               lat:3.07, ghi:5.6, tilt:4, az:184 },
+  { name:'Kuala Lumpur',     state:'Federal Territory',      lat:3.14, ghi:5.7, tilt:4, az:184 },
+  { name:'Putrajaya',        state:'Federal Territory',      lat:2.93, ghi:5.6, tilt:4, az:184 },
+  { name:'Seremban',         state:'Negeri Sembilan',        lat:2.73, ghi:5.5, tilt:5, az:185 },
+  { name:'Malacca City',     state:'Melaka',                 lat:2.19, ghi:5.4, tilt:5, az:186 },
+  { name:'Johor Bahru',      state:'Johor',                  lat:1.49, ghi:5.3, tilt:6, az:187 },
+  { name:'Kuching',          state:'Sarawak',                lat:1.55, ghi:5.0, tilt:6, az:190 },
+  { name:'Kota Kinabalu',    state:'Sabah',                  lat:5.98, ghi:5.1, tilt:8, az:165 },
+];
+
+
+const LOCATION_ID_BY_CITY_NAME = {
+  'Kangar': 'perlis', 'Alor Setar': 'kedah', 'George Town': 'penang', 'Kota Bharu': 'kelantan',
+  'Ipoh': 'perak', 'Kuala Terengganu': 'terengganu', 'Kuantan': 'pahang',
+  'Shah Alam': 'selangor', 'Kuala Lumpur': 'kuala_lumpur', 'Putrajaya': 'putrajaya',
+  'Seremban': 'negeri_sembilan', 'Malacca City': 'melaka', 'Johor Bahru': 'johor',
+  'Kuching': 'sarawak', 'Kota Kinabalu': 'sabah',
+};
+
+
+const predictionCache = {};
+const formatISODate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+let backendStatus = 'unknown';
+
+async function fetchDataForCityDate(locationId, dateObj){
+  const key = `${locationId}_${formatISODate(dateObj)}`;
+
+  if (predictionCache[key]) {
+    return predictionCache[key];
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/predict`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        location: locationId,
+        date: formatISODate(dateObj)
+      }),
+    });
+
+    if (!res.ok) {
+      backendStatus = 'unreachable';
+      return null;
+    }
+
+    const data = await res.json();
+
+    predictionCache[key] = data;
+    backendStatus = 'connected';
+
+    return data;
+
+  } catch (err) {
+    backendStatus = 'unreachable';
+    return null;
+  }
+}
+
+function ensureCurrentCityDateFetched(){
+  const locId = LOCATION_ID_BY_CITY_NAME[CITIES[state.cityIndex].name];
+  if (!locId) return; 
+  const key = `${locId}_${formatISODate(dateNavCurrent)}`;
+  if (predictionCache[key]) return;
+  withDockLoading(fetchDataForCityDate(locId, dateNavCurrent)).then(() => { renderDateNav(); refreshAll(); });
+}
+
+function backgroundBackendRetry(){
+  const locId = LOCATION_ID_BY_CITY_NAME[CITIES[state.cityIndex].name];
+  if (!locId) return;
+  fetchDataForCityDate(locId, dateNavCurrent).then((data) => {
+    renderDateNav(); 
+    if (data) refreshAll();
+  });
+}
+const BACKEND_RETRY_MS = 5000;
+
+function scheduleBackendRetry(){
+  window.setInterval(() => {
+    if (backendStatus !== 'connected') {
+      backgroundBackendRetry();
+    }
+  }, BACKEND_RETRY_MS);
+}
+
+const PERFORMANCE_RATIO = 0.8;
+const DAY_START = 6, DAY_END = 18;
+const MAX_SUN_ELEVATION = 82; 
+const NIGHT_FLOOR = 0.16;
+function withNightFloor(x){ return NIGHT_FLOOR + (1 - NIGHT_FLOOR) * x; }
+
+
+const D2R = Math.PI / 180;
+
+function daylightFrac(hour){
+  return Math.min(1, Math.max(0, (hour - DAY_START) / (DAY_END - DAY_START)));
+}
+function sunElevationDeg(hour){
+  
+  
+  
+  if (hour <= DAY_START || hour >= DAY_END) return -(Math.min(6, Math.abs(hour - (hour <= DAY_START ? DAY_START : DAY_END)) * 3));
+  return Math.sin(Math.PI * daylightFrac(hour)) * MAX_SUN_ELEVATION;
+}
+function sunAzimuthDeg(hour){
+  const f = daylightFrac(hour);
+  return 90 + f * 180; 
+}
+
+
+const MAX_MOON_ELEVATION = 68;
+const NIGHT_START = DAY_END, NIGHT_END = DAY_START + 24; 
+function nightFrac(hour){
+  const h = hour <= DAY_START ? hour + 24 : hour;
+  return Math.min(1, Math.max(0, (h - NIGHT_START) / (NIGHT_END - NIGHT_START)));
+}
+function moonElevationDeg(hour){
+  const h = hour <= DAY_START ? hour + 24 : hour;
+  if (h < NIGHT_START || h > NIGHT_END) return -6;
+  return Math.sin(Math.PI * nightFrac(hour)) * MAX_MOON_ELEVATION;
+}
+function moonAzimuthDeg(hour){
+  return 90 + nightFrac(hour) * 180; 
+}
+function sunVector(hour){
+  const el = sunElevationDeg(hour) * D2R;
+  const az = sunAzimuthDeg(hour) * D2R;
+  const elClamped = Math.max(el, -0.001);
+  return new THREE.Vector3(
+    Math.cos(elClamped) * Math.sin(az),
+    Math.sin(el),
+    Math.cos(elClamped) * Math.cos(az)
+  );
+}
+function panelNormal(tiltDeg, azDeg){
+  const t = tiltDeg * D2R, a = azDeg * D2R;
+  return new THREE.Vector3(Math.sin(t) * Math.sin(a), Math.cos(t), Math.sin(t) * Math.cos(a));
+}
+
+const DIRECT_WEIGHT = 0.8, DIFFUSE_WEIGHT = 0.2;
+function outputFactor(tiltDeg, azDeg, hour){
+  const el = sunElevationDeg(hour);
+  if (el <= 0) return 0;
+  const s = sunVector(hour);
+  const n = panelNormal(tiltDeg, azDeg);
+  const direct = Math.max(0, s.dot(n));
+  const skyBrightness = Math.sin(el * D2R);
+  const diffuse = skyBrightness * (1 + Math.cos(tiltDeg * D2R)) / 2;
+  return DIRECT_WEIGHT * direct + DIFFUSE_WEIGHT * diffuse;
+}
+function dailyIntegral(tiltDeg, azDeg){
+  let sum = 0;
+  const steps = 48;
+  for (let i = 0; i <= steps; i++){
+    const hour = DAY_START + (i / steps) * (DAY_END - DAY_START);
+    sum += outputFactor(tiltDeg, azDeg, hour);
+  }
+  return sum / steps;
+}
+
+
+const STC_REFERENCE_W_M2 = 1000; 
+
+function poaAtOrientation(tiltDeg, azDeg, solarZenithDeg, solarAzimuthDeg, dniWm2, ghiWm2, dhiWm2){
+  if (solarZenithDeg >= 90) return 0;
+  const albedo = 0.25; 
+  const zenithRad = solarZenithDeg * D2R;
+  const tiltRad = tiltDeg * D2R;
+  const azDiffRad = (solarAzimuthDeg - azDeg) * D2R;
+  const cosAoi = Math.max(0, Math.cos(zenithRad) * Math.cos(tiltRad) + Math.sin(zenithRad) * Math.sin(tiltRad) * Math.cos(azDiffRad));
+  const poaDirect = dniWm2 * cosAoi;
+  const poaSkyDiffuse = dhiWm2 * (1 + Math.cos(tiltRad)) / 2;
+  const poaGroundDiffuse = ghiWm2 * albedo * (1 - Math.cos(tiltRad)) / 2;
+  return poaDirect + poaSkyDiffuse + poaGroundDiffuse;
+}
+
+
+
+
+function interpolateArray(arr, h){
+  const clamped = Math.min(Math.max(h, 0), 23.999);
+  const i0 = Math.floor(clamped);
+  const i1 = Math.min(i0 + 1, 23);
+  const frac = clamped - i0;
+  return arr[i0] + (arr[i1] - arr[i0]) * frac;
+}
+
+function realSunElevationDeg(c, hour){
+  if (c._hourly) {
+    const elevations = c._hourly.map(
+      pt => pt.solar_position.apparent_elevation_deg
+    );
+
+    return interpolateArray(elevations, hour);
+  }
+
+  
+  return sunElevationDeg(hour);
+}
+
+
+function recommendedFactorAt(c, h){
+  if (c._hourly) {
+    if (!c._recPoaHourly) c._recPoaHourly = c._hourly.map(pt => pt.recommended_poa_w_m2);
+    return interpolateArray(c._recPoaHourly, h) / STC_REFERENCE_W_M2;
+  }
+  return outputFactor(c.tilt, c.az, h); 
+}
+
+function userFactorAt(c, h){
+  if (c._hourly) {
+    if (!c._userPoaHourly) {
+      c._userPoaHourly = c._hourly.map(pt => poaAtOrientation(
+        state.tilt, state.az,
+        pt.solar_position.apparent_zenith_deg, pt.solar_position.azimuth_deg,
+        pt.irradiance.dni_w_m2, pt.irradiance.ghi_w_m2, pt.irradiance.dhi_w_m2
+      ));
+    }
+    return interpolateArray(c._userPoaHourly, h) / STC_REFERENCE_W_M2;
+  }
+  return outputFactor(state.tilt, state.az, h); 
+}
+
+
+
+
+function realDailyTotalWhM2(c, tiltDeg, azDeg){
+  let sum = 0;
+  for (const pt of c._hourly) {
+    sum += poaAtOrientation(tiltDeg, azDeg, pt.solar_position.apparent_zenith_deg, pt.solar_position.azimuth_deg, pt.irradiance.dni_w_m2, pt.irradiance.ghi_w_m2, pt.irradiance.dhi_w_m2);
+  }
+  return sum;
+}
+function compassPoint(az){
+  const names = ['N','NE','E','SE','S','SW','W','NW'];
+  const i = Math.round(((az % 360) + 360) % 360 / 45) % 8;
+  return names[i];
+}
+function fmtPct(x){ return Math.round(x * 100) + '%'; }
+function fmtDeg(x){ return Math.round(x) + '°'; }
+function fmtTimeHHMM(h){
+  const hh = Math.floor(h).toString().padStart(2, '0');
+  const mm = Math.round((h - Math.floor(h)) * 60).toString().padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+function parseTimeInput(raw){
+  const s = raw.trim();
+  const hm = /^(\d{1,2}):([0-5]\d)$/.exec(s);
+  if (hm){
+    const h = parseInt(hm[1], 10), m = parseInt(hm[2], 10);
+    if (h > 24 || (h === 24 && m > 0)) return NaN;
+    return h + m / 60;
+  }
+  return parseFloat(s);
+}
+
+
+const state = {
+  cityIndex: 8, 
+  hour: 17,
+  tilt: 28,
+  az: 110,
+  
+  
+  
+  savedTilt: 28,
+  savedAz: 110,
+  reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  animating: false,
+};
+
+function currentCity(){
+  const base = CITIES[state.cityIndex];
+  const locId = LOCATION_ID_BY_CITY_NAME[base.name];
+  const pred = locId && typeof dateNavCurrent !== 'undefined' && predictionCache[`${locId}_${formatISODate(dateNavCurrent)}`];
+  if (pred) {
+    return {
+      ...base,
+      ghi: pred.predicted_ghi_kwh_m2_total,
+      tilt: pred.recommended.tilt_deg,
+      az: pred.recommended.azimuth_deg,
+      _dataSource: pred.ghi_source, 
+      _hourly: pred.hourly, 
+      _recDailyTotalWhM2: pred.recommended.poa_daily_total_wh_m2, 
+    };
+  }
+  return base;
+}
+
+
+const el = {
+  citySelect: document.getElementById('citySelect'),
+  timeSlider: document.getElementById('timeSlider'),
+  tiltSlider: document.getElementById('tiltSlider'),
+  azSlider: document.getElementById('azSlider'),
+  timeValue: document.getElementById('timeValue'),
+  tiltValue: document.getElementById('tiltValue'),
+  azValue: document.getElementById('azValue'),
+  timeValueInput: document.getElementById('timeValueInput'),
+  tiltValueInput: document.getElementById('tiltValueInput'),
+  azValueInput: document.getElementById('azValueInput'),
+  matchBtn: document.getElementById('matchBtn'),
+  recOutput: document.getElementById('recOutput'),
+  userOutput: document.getElementById('userOutput'),
+  lossBanner: document.getElementById('lossBanner'),
+  sunElevation: document.getElementById('sunElevation'),
+  ghiVal: document.getElementById('ghiVal'),
+  optTilt: document.getElementById('optTilt'),
+  optAz: document.getElementById('optAz'),
+  recYield: document.getElementById('recYield'),
+  userYield: document.getElementById('userYield'),
+  lossYield: document.getElementById('lossYield'),
+  lossYieldSub: document.getElementById('lossYieldSub'),
+  compareBlock: document.getElementById('compareBlock'),
+  chartBlock: document.getElementById('chartBlock'),
+  factsBlock: document.getElementById('factsBlock'),
+  cameraHint: document.getElementById('cameraHint'),
+  sceneLoading: document.getElementById('sceneLoading'),
+  chartLineRec: document.getElementById('chartLineRec'),
+  chartLineUser: document.getElementById('chartLineUser'),
+  chartAreaRec: document.getElementById('chartAreaRec'),
+  chartAreaUser: document.getElementById('chartAreaUser'),
+  chartNowLine: document.getElementById('chartNowLine'),
+  chartNowDotRec: document.getElementById('chartNowDotRec'),
+  chartNowDotUser: document.getElementById('chartNowDotUser'),
+  chartHoverTarget: document.getElementById('chartHoverTarget'),
+  chartHoverLine: document.getElementById('chartHoverLine'),
+  chartHoverDotRec: document.getElementById('chartHoverDotRec'),
+  chartHoverDotUser: document.getElementById('chartHoverDotUser'),
+  chartTooltip: document.getElementById('chartTooltip'),
+  chartTooltipTime: document.getElementById('chartTooltipTime'),
+  chartTooltipRec: document.getElementById('chartTooltipRec'),
+  chartTooltipUser: document.getElementById('chartTooltipUser'),
+  powerChart: document.getElementById('powerChart'),
+  topbar: document.querySelector('.topbar'),
+  liveStatus: document.getElementById('liveStatus'),
+  instrumentDock: document.getElementById('instrumentDock'),
+  setupModal: document.getElementById('setupModal'),
+  setupModalForm: document.getElementById('setupModalForm'),
+  setupTilt: document.getElementById('setupTilt'),
+  setupAz: document.getElementById('setupAz'),
+  setupModalError: document.getElementById('setupModalError'),
+  setupModalCancel: document.getElementById('setupModalCancel'),
+  setupModalClose: document.getElementById('setupModalClose'),
+  settingsFab: document.getElementById('settingsFab'),
+  resetToSetupBtn: document.getElementById('resetToSetupBtn'),
+  dateNavLabel: document.getElementById('dateNavLabel'),
+  dataSourceTag: document.getElementById('dataSourceTag'),
+  backendStatusNotice: document.getElementById('backendStatusNotice'),
+  dateNavPrev: document.getElementById('dateNavPrev'),
+  dateNavNext: document.getElementById('dateNavNext'),
+  dateCalendar: document.getElementById('dateCalendar'),
+  dateCalHead: document.getElementById('dateCalHead'),
+  dateCalWeekdays: document.getElementById('dateCalWeekdays'),
+  dateCalGrid: document.getElementById('dateCalGrid'),
+  dateCalTodayBtn: document.getElementById('dateCalTodayBtn'),
+};
+
+
+const syncTopbarHeight = () => {
+  document.documentElement.style.setProperty('--topbar-h', `${el.topbar.offsetHeight}px`);
+};
+new ResizeObserver(syncTopbarHeight).observe(el.topbar);
+syncTopbarHeight();
+
+const syncInstrumentDockHeight = () => {
+  document.documentElement.style.setProperty('--instrument-dock-h', `${el.instrumentDock.offsetHeight}px`);
+};
+new ResizeObserver(syncInstrumentDockHeight).observe(el.instrumentDock);
+syncInstrumentDockHeight();
+
+
+const DATE_NAV_TODAY = new Date(2025, 11, 30); 
+const DATE_NAV_MAX = new Date(2025, 11, 31); 
+const DATE_NAV_MIN = new Date(2016, 0, 1); 
+let dateNavCurrent = new Date(DATE_NAV_TODAY);
+
+const isSameDateNavDay = (a, b) =>
+  a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+const formatDateNav = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+
+
+const DATA_SOURCE_TAG = {
+  historical: { text: 'Recorded', cls: 'legend-chip--blue' },
+  clearsky_placeholder: { text: 'Estimate', cls: 'legend-chip--muted' },
+};
+
+const OFFLINE_TAG = { text: 'Offline', cls: 'legend-chip--muted' };
+function dataSourceTagFor(source){
+  if (!source) return null;
+  if (source.startsWith('model:')) return { text: 'Predicted', cls: 'legend-chip--gold' };
+  return DATA_SOURCE_TAG[source] || null;
+}
+
+function renderDateNav(){
+  const isToday = isSameDateNavDay(dateNavCurrent, DATE_NAV_TODAY);
+  el.dateNavLabel.textContent = isToday ? `Today, ${formatDateNav(dateNavCurrent)}` : formatDateNav(dateNavCurrent);
+  el.dateNavNext.disabled = isSameDateNavDay(dateNavCurrent, DATE_NAV_MAX);
+  el.dateNavPrev.disabled = isSameDateNavDay(dateNavCurrent, DATE_NAV_MIN);
+
+
+  const source = currentCity()._dataSource;
+  const sourceTag = (source === 'historical' && isToday) ? null : dataSourceTagFor(source);
+  const tag = sourceTag || (backendStatus === 'unreachable' ? OFFLINE_TAG : null);
+  el.dataSourceTag.className = 'legend-chip data-source-tag' + (tag ? ` ${tag.cls}` : '');
+  el.dataSourceTag.textContent = tag ? tag.text : '';
+  el.dataSourceTag.hidden = !tag;
+
+  el.backendStatusNotice.hidden = backendStatus !== 'unreachable';
+}
+
+function goToDate(target){
+  if (target > DATE_NAV_MAX) target = new Date(DATE_NAV_MAX);
+  else if (target < DATE_NAV_MIN) target = new Date(DATE_NAV_MIN);
+  dateNavCurrent = target;
+  renderDateNav();
+  refreshAll();
+  ensureCurrentCityDateFetched();
+}
+function shiftDateNav(days){
+  const next = new Date(dateNavCurrent);
+  next.setDate(next.getDate() + days);
+  if (next > DATE_NAV_MAX || next < DATE_NAV_MIN) return; 
+  goToDate(next);
+}
+el.dateNavPrev.addEventListener('click', () => shiftDateNav(-1));
+el.dateNavNext.addEventListener('click', () => shiftDateNav(1));
+renderDateNav();
+ensureCurrentCityDateFetched(); 
+scheduleBackendRetry(); 
+
+
+let calendarMode = 'day';
+let calendarViewYear = dateNavCurrent.getFullYear();
+let calendarViewMonth = dateNavCurrent.getMonth();
+
+const isCalMonthAt = (d) => calendarViewYear === d.getFullYear() && calendarViewMonth === d.getMonth();
+const isMonthOutOfRange = (y, m) => new Date(y, m + 1, 0) < DATE_NAV_MIN || new Date(y, m, 1) > DATE_NAV_MAX;
+const isYearOutOfRange = (y) => new Date(y, 11, 31) < DATE_NAV_MIN || new Date(y, 0, 1) > DATE_NAV_MAX;
+
+function calNavArrowSVG(dir){
+  const d = dir === 'prev' ? 'M15 6l-6 6 6 6' : 'M9 6l6 6-6 6';
+  return `<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="${d}" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+
+
+function renderCalHead(){
+  if (calendarMode === 'day'){
+    el.dateCalHead.innerHTML = `
+      <button type="button" class="date-cal-nav" id="dateCalPrev" aria-label="Previous month">${calNavArrowSVG('prev')}</button>
+      <span class="date-cal-title-group">
+        <button type="button" class="date-cal-title-part" id="dateCalMonthBtn">${new Date(calendarViewYear, calendarViewMonth, 1).toLocaleDateString('en-GB', { month: 'long' })}</button>
+        <button type="button" class="date-cal-title-part" id="dateCalYearBtn">${calendarViewYear}</button>
+      </span>
+      <button type="button" class="date-cal-nav" id="dateCalNext" aria-label="Next month">${calNavArrowSVG('next')}</button>`;
+    document.getElementById('dateCalPrev').disabled = isCalMonthAt(DATE_NAV_MIN);
+    document.getElementById('dateCalNext').disabled = isCalMonthAt(DATE_NAV_MAX);
+    document.getElementById('dateCalPrev').addEventListener('click', () => shiftCalendarMonth(-1));
+    document.getElementById('dateCalNext').addEventListener('click', () => shiftCalendarMonth(1));
+    document.getElementById('dateCalMonthBtn').addEventListener('click', () => { calendarMode = 'month'; renderCalendar(); });
+    document.getElementById('dateCalYearBtn').addEventListener('click', () => { calendarMode = 'year'; renderCalendar(); });
+  } else if (calendarMode === 'month'){
+    el.dateCalHead.innerHTML = `
+      <button type="button" class="date-cal-nav" id="dateCalPrev" aria-label="Previous year">${calNavArrowSVG('prev')}</button>
+      <button type="button" class="date-cal-title-part" id="dateCalYearBtn">${calendarViewYear}</button>
+      <button type="button" class="date-cal-nav" id="dateCalNext" aria-label="Next year">${calNavArrowSVG('next')}</button>`;
+    document.getElementById('dateCalPrev').disabled = calendarViewYear <= DATE_NAV_MIN.getFullYear();
+    document.getElementById('dateCalNext').disabled = calendarViewYear >= DATE_NAV_MAX.getFullYear();
+    document.getElementById('dateCalPrev').addEventListener('click', () => { calendarViewYear -= 1; renderCalendar(); });
+    document.getElementById('dateCalNext').addEventListener('click', () => { calendarViewYear += 1; renderCalendar(); });
+    document.getElementById('dateCalYearBtn').addEventListener('click', () => { calendarMode = 'year'; renderCalendar(); });
+  } else { 
+    el.dateCalHead.innerHTML = `
+      <span class="date-cal-nav is-spacer" aria-hidden="true">${calNavArrowSVG('prev')}</span>
+      <span class="date-cal-title-static">${DATE_NAV_MIN.getFullYear()}&ndash;${DATE_NAV_MAX.getFullYear()}</span>
+      <span class="date-cal-nav is-spacer" aria-hidden="true">${calNavArrowSVG('next')}</span>`;
+  }
+}
+
+function renderCalDayGrid(){
+  const firstOfMonth = new Date(calendarViewYear, calendarViewMonth, 1);
+  const gridStart = new Date(calendarViewYear, calendarViewMonth, 1 - firstOfMonth.getDay());
+
+  el.dateCalGrid.className = 'date-cal-grid';
+  el.dateCalGrid.innerHTML = '';
+  for (let i = 0; i < 42; i++){
+    const cellDate = new Date(gridStart.getFullYear(), gridStart.getMonth(), gridStart.getDate() + i);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'date-cal-day';
+    btn.textContent = cellDate.getDate();
+    btn.setAttribute('aria-label', cellDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }));
+    if (cellDate.getMonth() !== calendarViewMonth) btn.classList.add('is-outside');
+    if (isSameDateNavDay(cellDate, DATE_NAV_TODAY)) btn.classList.add('is-today');
+    if (isSameDateNavDay(cellDate, dateNavCurrent)) btn.classList.add('is-selected');
+    if (cellDate < DATE_NAV_MIN || cellDate > DATE_NAV_MAX) btn.disabled = true;
+    else btn.addEventListener('click', () => { goToDate(cellDate); el.dateCalendar.hidePopover(); });
+    el.dateCalGrid.appendChild(btn);
+  }
+}
+function renderCalMonthGrid(){
+  el.dateCalGrid.className = 'date-cal-grid date-cal-grid--months';
+  el.dateCalGrid.innerHTML = '';
+  for (let m = 0; m < 12; m++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'date-cal-month';
+    btn.textContent = new Date(calendarViewYear, m, 1).toLocaleDateString('en-GB', { month: 'short' });
+    btn.setAttribute('aria-label', new Date(calendarViewYear, m, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }));
+    if (calendarViewYear === DATE_NAV_TODAY.getFullYear() && m === DATE_NAV_TODAY.getMonth()) btn.classList.add('is-today');
+    if (calendarViewYear === dateNavCurrent.getFullYear() && m === dateNavCurrent.getMonth()) btn.classList.add('is-selected');
+    if (isMonthOutOfRange(calendarViewYear, m)) btn.disabled = true;
+    else btn.addEventListener('click', () => { calendarViewMonth = m; calendarMode = 'day'; renderCalendar(); });
+    el.dateCalGrid.appendChild(btn);
+  }
+}
+function renderCalYearGrid(){
+  el.dateCalGrid.className = 'date-cal-grid date-cal-grid--years';
+  el.dateCalGrid.innerHTML = '';
+  for (let y = DATE_NAV_MIN.getFullYear(); y <= DATE_NAV_MAX.getFullYear(); y++){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'date-cal-year';
+    btn.textContent = y;
+    if (y === DATE_NAV_TODAY.getFullYear()) btn.classList.add('is-today');
+    if (y === dateNavCurrent.getFullYear()) btn.classList.add('is-selected');
+    if (isYearOutOfRange(y)) btn.disabled = true;
+    else btn.addEventListener('click', () => { calendarViewYear = y; calendarMode = 'month'; renderCalendar(); });
+    el.dateCalGrid.appendChild(btn);
+  }
+}
+
+function renderCalendar(){
+  renderCalHead();
+  el.dateCalWeekdays.hidden = calendarMode !== 'day';
+  if (calendarMode === 'day') renderCalDayGrid();
+  else if (calendarMode === 'month') renderCalMonthGrid();
+  else renderCalYearGrid();
+}
+function shiftCalendarMonth(delta){
+  let y = calendarViewYear, m = calendarViewMonth + delta;
+  if (m < 0){ m = 11; y -= 1; } else if (m > 11){ m = 0; y += 1; }
+  calendarViewYear = y; calendarViewMonth = m;
+  renderCalendar();
+}
+el.dateCalTodayBtn.addEventListener('click', () => {
+  calendarViewYear = DATE_NAV_TODAY.getFullYear();
+  calendarViewMonth = DATE_NAV_TODAY.getMonth();
+  calendarMode = 'day';
+  goToDate(new Date(DATE_NAV_TODAY));
+  el.dateCalendar.hidePopover();
+});
+el.dateCalendar.addEventListener('beforetoggle', (e) => {
+  if (e.newState !== 'open') return;
+  const r = el.dateNavLabel.getBoundingClientRect();
+  const popoverWidth = 264; 
+  const desiredLeft = Math.round(r.left + r.width / 2 - popoverWidth / 2);
+  el.dateCalendar.style.left = `${Math.max(8, Math.min(window.innerWidth - popoverWidth - 8, desiredLeft))}px`;
+  el.dateCalendar.style.top = `${Math.round(r.bottom + 6)}px`;
+  calendarMode = 'day';
+  calendarViewYear = dateNavCurrent.getFullYear();
+  calendarViewMonth = dateNavCurrent.getMonth();
+  renderCalendar();
+});
+
+
+const GLOSSARY = {
+  ghi: 'GHI (Global Horizontal Irradiance): the total sunlight energy hitting flat ground here, per day.',
+  tilt: "Tilt: the panel's angle tilted up from flat ground -- 0° is lying flat.",
+  azimuth: 'Azimuth: the compass direction your panel should face -- 0° is North, 180° is South.',
+  yield: 'kWh/kWp: energy produced per year for every 1 kW of panel capacity installed -- higher is better.',
+};
+const glossaryPopover = document.getElementById('glossaryPopover');
+let activeGlossaryTrigger = null;
+
+glossaryPopover.addEventListener('toggle', (e) => {
+  if (e.newState === 'closed' && activeGlossaryTrigger){
+    activeGlossaryTrigger.setAttribute('aria-expanded', 'false');
+    activeGlossaryTrigger = null;
+  }
+});
+document.querySelectorAll('.info-trigger').forEach(btn => {
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-describedby', 'glossaryPopover');
+  btn.addEventListener('click', () => {
+    glossaryPopover.textContent = GLOSSARY[btn.dataset.term] || '';
+    if (glossaryPopover.matches(':popover-open')) glossaryPopover.hidePopover();
+    const r = btn.getBoundingClientRect();
+    glossaryPopover.style.left = 'auto';
+    glossaryPopover.style.right = `${Math.round(window.innerWidth - r.right)}px`;
+    glossaryPopover.style.top = `${Math.round(r.bottom + 6)}px`;
+    glossaryPopover.showPopover();
+    if (activeGlossaryTrigger && activeGlossaryTrigger !== btn) activeGlossaryTrigger.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-expanded', 'true');
+    activeGlossaryTrigger = btn;
+  });
+});
+
+
+CITIES.forEach((c, i) => {
+  const opt = document.createElement('option');
+  opt.value = i;
+  opt.textContent = `${c.name}, ${c.state}`;
+  el.citySelect.appendChild(opt);
+});
+el.citySelect.value = state.cityIndex;
+
+
+const canvas = document.getElementById('scene-canvas');
+const rootStyle = getComputedStyle(document.documentElement);
+const cssVar = (name) => rootStyle.getPropertyValue(name).trim();
+
+
+let webglOK = true;
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+} catch (err) {
+  webglOK = false;
+  renderer = { shadowMap: {}, setPixelRatio(){}, setSize(){}, render(){} };
+  document.getElementById('sceneFallback').hidden = false;
+  document.getElementById('cameraHint').classList.add('is-hidden'); }
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a0d16, 0.028);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+camera.position.set(4.4, 2.9, 5.6);
+
+const controls = new OrbitControls(camera, canvas);
+controls.enableDamping = !state.reducedMotion;
+controls.dampingFactor = 0.08;
+controls.minDistance = 4.2;
+controls.maxDistance = 12;
+controls.maxPolarAngle = Math.PI * 0.49;
+controls.minPolarAngle = Math.PI * 0.16;
+controls.target.set(0, 1.0, 0);
+controls.enablePan = false;
+controls.update();
+
+
+const ambient = new THREE.HemisphereLight(0x3a4a66, 0x0a0a10, 0.55);
+scene.add(ambient);
+const hemiSkyNight = new THREE.Color(0x2a3550);
+const hemiSkyDay = new THREE.Color(0xbfe6ff);
+const hemiGroundNight = new THREE.Color(0x0a0a10);
+const hemiGroundDay = new THREE.Color(0x4a4636);
+
+const sunLight = new THREE.DirectionalLight(0xffe3ad, 1.6);
+sunLight.castShadow = true;
+sunLight.shadow.mapSize.set(1024, 1024);
+sunLight.shadow.camera.left = -6;
+sunLight.shadow.camera.right = 6;
+sunLight.shadow.camera.top = 6;
+sunLight.shadow.camera.bottom = -6;
+sunLight.shadow.camera.near = 1;
+sunLight.shadow.camera.far = 20;
+sunLight.shadow.bias = -0.0015;
+scene.add(sunLight);
+scene.add(sunLight.target);
+
+const sunFill = new THREE.PointLight(0xffcf8a, 0.5, 20, 2);
+scene.add(sunFill);
+
+
+const GROUND_R = 4.4;
+const groundGeo = new THREE.CircleGeometry(GROUND_R, 96);
+function makeGroundTexture(){
+  const cvs = document.createElement('canvas');
+  cvs.width = 512; cvs.height = 512;
+  const ctx = cvs.getContext('2d');
+  const grad = ctx.createRadialGradient(256, 256, 0, 256, 256, 256);
+  grad.addColorStop(0, cssVar('--scene-ground-near'));
+  grad.addColorStop(0.55, cssVar('--scene-ground-mid'));
+  grad.addColorStop(1, cssVar('--scene-ground-far'));
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+  const tex = new THREE.CanvasTexture(cvs);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+const groundMat = new THREE.MeshStandardMaterial({
+  map: makeGroundTexture(), roughness: 0.95, metalness: 0.05,
+});
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+
+const ringMat = new THREE.LineBasicMaterial({ color: 0x2a3550, transparent: true, opacity: 0.55, depthWrite: true });
+[1.4, 2.6, 3.8].forEach(r => {
+  const pts = [];
+  for (let i = 0; i <= 96; i++){
+    const a = (i / 96) * Math.PI * 2;
+    pts.push(new THREE.Vector3(Math.sin(a) * r, 0.002, Math.cos(a) * r));
+  }
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  scene.add(new THREE.Line(g, ringMat));
+});
+const tickMat = new THREE.LineBasicMaterial({ color: 0x3a4668, transparent: true, opacity: 0.7, depthWrite: true });
+for (let i = 0; i < 36; i++){
+  const a = (i / 36) * Math.PI * 2;
+  const r0 = i % 9 === 0 ? GROUND_R - 0.28 : GROUND_R - 0.14;
+  const pts = [
+    new THREE.Vector3(Math.sin(a) * r0, 0.003, Math.cos(a) * r0),
+    new THREE.Vector3(Math.sin(a) * GROUND_R, 0.003, Math.cos(a) * GROUND_R),
+  ];
+  const g = new THREE.BufferGeometry().setFromPoints(pts);
+  scene.add(new THREE.Line(g, tickMat));
+}
+
+function makeTextSprite(text, color){
+  const cvs = document.createElement('canvas');
+  cvs.width = 128; cvs.height = 128;
+  const ctx = cvs.getContext('2d');
+  ctx.font = '600 64px Inter, sans-serif';
+  ctx.fillStyle = color;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, 64, 68);
+  const tex = new THREE.CanvasTexture(cvs);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: true, opacity: 0.85 });
+  const sprite = new THREE.Sprite(mat);
+  sprite.scale.set(0.34, 0.34, 1);
+  return sprite;
+}
+const compassLabels = [
+  { label: 'N', az: 0 }, { label: 'E', az: 90 }, { label: 'S', az: 180 }, { label: 'W', az: 270 },
+];
+
+document.fonts.load('600 64px Inter').then(() => {
+  compassLabels.forEach(({ label, az }) => {
+    const a = az * D2R;
+    const s = makeTextSprite(label, label === 'S' ? cssVar('--scene-compass-accent') : cssVar('--scene-compass-muted'));
+    s.position.set(Math.sin(a) * (GROUND_R + 0.42), 0.3, Math.cos(a) * (GROUND_R + 0.42));
+    scene.add(s);
+  });
+});
+
+
+function makeCellTexture(hue, alpha){
+  const cvs = document.createElement('canvas');
+  cvs.width = 256; cvs.height = 384;
+  const ctx = cvs.getContext('2d');
+  ctx.fillStyle = `hsla(${hue}, 45%, 10%, ${alpha})`;
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+  const cols = 6, rows = 10, pad = 6;
+  const cw = (cvs.width - pad * (cols + 1)) / cols;
+  const ch = (cvs.height - pad * (rows + 1)) / rows;
+  ctx.fillStyle = `hsla(${hue}, 55%, 22%, ${alpha})`;
+  for (let r = 0; r < rows; r++){
+    for (let c = 0; c < cols; c++){
+      const x = pad + c * (cw + pad);
+      const y = pad + r * (ch + pad);
+      ctx.fillRect(x, y, cw, ch);
+    }
+  }
+  ctx.strokeStyle = `hsla(${hue}, 70%, 60%, ${alpha * 0.35})`;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(1, 1, cvs.width - 2, cvs.height - 2);
+  const tex = new THREE.CanvasTexture(cvs);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+
+const PANEL_W = 1.5, PANEL_H = 0.9, PANEL_D = 0.045;
+function buildPanelRig({ hue, faceColor, frameColor, emissive, emissiveIntensity, opacity, offsetX, isGhost }){
+  const rig = new THREE.Group();
+  rig.position.x = offsetX;
+
+  
+  const post = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.065, 0.85, 16),
+    new THREE.MeshStandardMaterial({
+      color: 0x1c2436, roughness: 0.55, metalness: 0.35,
+      emissive: frameColor, emissiveIntensity: isGhost ? 0.28 : 0.14,
+    })
+  );
+  post.position.y = 0.425;
+  post.castShadow = true;
+  rig.add(post);
+
+  
+  const base = new THREE.Mesh(
+    new THREE.RingGeometry(0.09, 0.16, 32),
+    new THREE.MeshBasicMaterial({ color: frameColor, transparent: true, opacity: isGhost ? 0.5 : 0.65, side: THREE.DoubleSide })
+  );
+  base.rotation.x = -Math.PI / 2;
+  base.position.y = 0.006;
+  rig.add(base);
+
+  const yaw = new THREE.Group();
+  yaw.position.y = 0.85;
+  rig.add(yaw);
+
+  const tiltGroup = new THREE.Group();
+  yaw.add(tiltGroup);
+
+  const frameGeo = new THREE.BoxGeometry(PANEL_W + 0.05, PANEL_D + 0.02, PANEL_H + 0.05);
+  const frameMat = new THREE.MeshStandardMaterial({
+    color: frameColor, roughness: 0.4, metalness: 0.6, transparent: opacity < 1, opacity,
+    emissive: frameColor, emissiveIntensity: isGhost ? 0.5 : 0.06,
+  });
+  const frame = new THREE.Mesh(frameGeo, frameMat);
+  frame.castShadow = opacity >= 1;
+  frame.receiveShadow = true;
+
+  const faceMat = new THREE.MeshStandardMaterial({
+    map: makeCellTexture(hue, opacity),
+    color: faceColor,
+    roughness: 0.32,
+    metalness: 0.15,
+    emissive,
+    emissiveIntensity,
+    transparent: opacity < 1,
+    opacity,
+  });
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(PANEL_W, PANEL_H), faceMat);
+  face.rotation.x = -Math.PI / 2;
+  face.position.y = PANEL_D / 2 + 0.001;
+  face.castShadow = opacity >= 1;
+
+  const panelGroup = new THREE.Group();
+  panelGroup.add(frame);
+  panelGroup.add(face);
+  panelGroup.position.z = -0.5; 
+  tiltGroup.add(panelGroup);
+
+  
+  const normalGeo = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(0, PANEL_D / 2, 0), new THREE.Vector3(0, PANEL_D / 2 + 0.55, 0),
+  ]);
+  const normalLine = new THREE.Line(normalGeo, new THREE.LineBasicMaterial({ color: frameColor, transparent: true, opacity: 0.6 }));
+  panelGroup.add(normalLine);
+
+  return { rig, yaw, tiltGroup };
+}
+
+const recPanel = buildPanelRig({
+  hue: 42, faceColor: 0xc99544, frameColor: 0xe4b661, emissive: 0xe4b661, emissiveIntensity: 0.7,
+  opacity: 0.58, offsetX: 0.95, isGhost: true,
+});
+const userPanel = buildPanelRig({
+  hue: 214, faceColor: 0x1a2740, frameColor: 0x5b9be0, emissive: 0x2c5c99, emissiveIntensity: 0.16,
+  opacity: 1, offsetX: -0.95, isGhost: false,
+});
+scene.add(recPanel.rig);
+scene.add(userPanel.rig);
+
+
+const SUN_R = 6.4;
+function celestialPosAt(elevationDeg, azimuthDeg, radius, minY){
+  const el = Math.max(elevationDeg, -8) * D2R;
+  const az = azimuthDeg * D2R;
+  return new THREE.Vector3(
+    Math.sin(az) * Math.cos(el) * radius,
+    Math.max(Math.sin(el) * radius, minY),
+    Math.cos(az) * Math.cos(el) * radius
+  );
+}
+function sunPosAt(hour){
+  const c = currentCity();
+
+  return celestialPosAt(
+    realSunElevationDeg(c, hour),
+    realSunAzimuthDeg(c, hour),
+    SUN_R,
+    -0.6
+  );
+}
+function realSunAzimuthDeg(c, hour){
+  if (c._hourly) {
+    const azimuths = c._hourly.map(
+      pt => pt.solar_position.azimuth_deg
+    );
+
+    return interpolateArray(azimuths, hour);
+  }
+
+  return sunAzimuthDeg(hour);
+}
+function moonPosAt(hour){
+  return celestialPosAt(moonElevationDeg(hour), moonAzimuthDeg(hour), SUN_R, -0.6);
+}
+const arcPts = [];
+for (let i = 0; i <= 64; i++){
+  const h = DAY_START + (i / 64) * (DAY_END - DAY_START);
+  arcPts.push(sunPosAt(h));
+}
+const arcGeo = new THREE.BufferGeometry().setFromPoints(arcPts);
+const arcLine = new THREE.Line(arcGeo, new THREE.LineBasicMaterial({ color: 0xffd27a, transparent: true, opacity: 0.28 }));
+scene.add(arcLine);
+
+const moonArcPts = [];
+for (let i = 0; i <= 64; i++){
+  const h = NIGHT_START + (i / 64) * (NIGHT_END - NIGHT_START);
+  moonArcPts.push(moonPosAt(h > 24 ? h - 24 : h));
+}
+const moonArcGeo = new THREE.BufferGeometry().setFromPoints(moonArcPts);
+const moonArcLine = new THREE.Line(moonArcGeo, new THREE.LineBasicMaterial({ color: 0x9db4e8, transparent: true, opacity: 0.2 }));
+scene.add(moonArcLine);
+
+function makeGlowTexture(core, mid, edge){
+  const cvs = document.createElement('canvas');
+  cvs.width = 128; cvs.height = 128;
+  const ctx = cvs.getContext('2d');
+  const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, core);
+  grad.addColorStop(0.35, mid);
+  grad.addColorStop(1, edge);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, cvs.width, cvs.height);
+  return new THREE.CanvasTexture(cvs);
+}
+const sunMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.22, 24, 24),
+  new THREE.MeshBasicMaterial({ color: 0xffb877 })
+);
+scene.add(sunMesh);
+const sunGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: makeGlowTexture('rgba(255,240,210,0.9)', 'rgba(255,221,153,0.45)', 'rgba(255,221,153,0)'),
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+}));
+sunGlow.scale.set(2.2, 2.2, 1);
+sunMesh.add(sunGlow);
+const sunCore = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: makeGlowTexture('rgba(255,255,255,0.95)', 'rgba(255,244,214,0.6)', 'rgba(255,244,214,0)'),
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+}));
+sunCore.scale.set(0.62, 0.62, 1);
+sunMesh.add(sunCore);
+
+
+const moonMesh = new THREE.Mesh(
+  new THREE.SphereGeometry(0.17, 24, 24),
+  new THREE.MeshBasicMaterial({ color: 0xcdd8f2 })
+);
+scene.add(moonMesh);
+const moonGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+  map: makeGlowTexture('rgba(214,224,255,0.55)', 'rgba(163,182,232,0.22)', 'rgba(163,182,232,0)'),
+  transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+}));
+moonGlow.scale.set(1.3, 1.3, 1);
+moonMesh.add(moonGlow);
+
+function updateMoonPosition(){
+  const elevDeg = moonElevationDeg(state.hour);
+  moonMesh.visible = elevDeg > -2;
+  if (moonMesh.visible) moonMesh.position.copy(moonPosAt(state.hour));
+}
+
+const sunColorLow = new THREE.Color(0xff7a2e);  
+const sunColorHigh = new THREE.Color(0xffd9a3); 
+
+function updateSunPosition(){
+  const c = currentCity();
+  const el = realSunElevationDeg(c, state.hour);
+  const pos = sunPosAt(state.hour);
+
+  sunMesh.position.copy(pos);
+  sunMesh.visible = el > -2;
+
+  sunLight.position.copy(pos);
+  sunLight.target.position.set(0, 0.6, 0);
+  sunFill.position.copy(pos);
+
+  updateMoonPosition();
+
+  const dayStrength = withNightFloor(
+    Math.max(0, Math.min(1, el / 40))
+  );
+
+  sunLight.castShadow = el > 0;
+  sunLight.intensity = 0.15 + dayStrength * 1.7;
+  sunFill.intensity = 0.1 + dayStrength * 0.7;
+  ambient.intensity = 0.22 + dayStrength * 0.4;
+
+  ambient.color.copy(hemiSkyNight)
+    .lerp(hemiSkyDay, dayStrength);
+
+  ambient.groundColor.copy(hemiGroundNight)
+    .lerp(hemiGroundDay, dayStrength);
+
+  const warmth = new THREE.Color(0xffdca0)
+    .lerp(new THREE.Color(0x9fb4ff), 1 - dayStrength);
+
+  sunLight.color = warmth;
+  renderer.toneMappingExposure = 0.7 + dayStrength * 0.55;
+
+  const sunHeat = Math.max(0, Math.min(1, el / 35));
+  const sunTint = sunColorLow.clone()
+    .lerp(sunColorHigh, sunHeat);
+
+  sunMesh.material.color.copy(sunTint);
+  sunGlow.material.color.copy(sunTint);
+}
+
+
+function updateSky(){
+  const c = currentCity();
+  const el = realSunElevationDeg(c, state.hour);
+  const dayStrength = withNightFloor(Math.max(0, Math.min(1, (el + 2) / 45)));
+  const twilight = Math.max(0, 1 - Math.abs(el - 5) / 22);
+  const hue = state.hour >= 12 ? 46 : 62; 
+
+  const root = document.documentElement.style;
+  root.setProperty('--sky-lift', dayStrength.toFixed(3));
+  root.setProperty('--horizon-opacity', (twilight * 0.32).toFixed(3));
+  root.setProperty('--horizon-hue', hue);
+
+
+  const fogL = 0.05 + dayStrength * 0.62;
+  const fogS = 0.24 - dayStrength * 0.08;
+  scene.fog.color.setHSL(0.6, fogS, fogL);
+}
+
+function applyPanelOrientation(rig, tiltDeg, azDeg){
+  rig.yaw.rotation.y = azDeg * D2R;
+  rig.tiltGroup.rotation.x = tiltDeg * D2R;
+}
+
+function renderFrame(){
+  applyPanelOrientation(recPanel, currentCity().tilt, currentCity().az);
+  applyPanelOrientation(userPanel, state.tilt, state.az);
+  updateSunPosition();
+  updateSky();
+}
+
+
+function resizeRenderer(){
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resizeRenderer);
+
+
+function tick(){
+  controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(tick);
+}
+resizeRenderer();
+renderFrame();
+if (webglOK) requestAnimationFrame(tick); 
+
+
+let hintHidden = false;
+canvas.addEventListener('pointerdown', () => {
+  if (hintHidden) return;
+  hintHidden = true;
+  el.cameraHint.classList.add('is-hidden');
+});
+
+
+const CHART = { x0: 18, x1: 276, yTop: 8, yBase: 80 };
+const CHART_START = 0, CHART_END = 24;
+function chartX(hour){ return CHART.x0 + ((hour - CHART_START) / (CHART_END - CHART_START)) * (CHART.x1 - CHART.x0); }
+function chartY(factor, maxFactor){ return CHART.yBase - (factor / maxFactor) * (CHART.yBase - CHART.yTop); }
+
+function buildRecCurve(c, maxFactor){
+  const steps = 96; 
+  const pts = [];
+  for (let i = 0; i <= steps; i++){
+    const h = CHART_START + (i / steps) * (CHART_END - CHART_START);
+    pts.push([chartX(h), chartY(recommendedFactorAt(c, h), maxFactor)]);
+  }
+  return pts;
+}
+function buildUserCurve(c, maxFactor){
+  const steps = 96;
+  const pts = [];
+  for (let i = 0; i <= steps; i++){
+    const h = CHART_START + (i / steps) * (CHART_END - CHART_START);
+    pts.push([chartX(h), chartY(userFactorAt(c, h), maxFactor)]);
+  }
+  return pts;
+}
+function pathFromPts(pts){ return 'M' + pts.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' L'); }
+function areaFromPts(pts){
+  return pathFromPts(pts) + ` L${pts[pts.length - 1][0].toFixed(1)},${CHART.yBase} L${pts[0][0].toFixed(1)},${CHART.yBase} Z`;
+}
+
+function currentMaxFactor(c){
+  let maxFactor = 0.15;
+  for (let i = 0; i <= 96; i++){
+    const h = CHART_START + (i / 96) * (CHART_END - CHART_START);
+    maxFactor = Math.max(maxFactor, recommendedFactorAt(c, h), userFactorAt(c, h));
+  }
+  return maxFactor * 1.08;
+}
+
+function updateChart(){
+  const c = currentCity();
+  const maxFactor = currentMaxFactor(c);
+
+  const recPts = buildRecCurve(c, maxFactor);
+  const userPts = buildUserCurve(c, maxFactor);
+  el.chartLineRec.setAttribute('d', pathFromPts(recPts));
+  el.chartLineUser.setAttribute('d', pathFromPts(userPts));
+  el.chartAreaRec.setAttribute('d', areaFromPts(recPts));
+  el.chartAreaUser.setAttribute('d', areaFromPts(userPts));
+
+  const nowX = chartX(Math.min(Math.max(state.hour, CHART_START), CHART_END));
+  const nowVisible = state.hour >= CHART_START && state.hour <= CHART_END;
+  el.chartNowLine.setAttribute('x1', nowX); el.chartNowLine.setAttribute('x2', nowX);
+  el.chartNowLine.style.opacity = nowVisible ? '1' : '0';
+  const recY = chartY(recommendedFactorAt(c, state.hour), maxFactor);
+  const userY = chartY(userFactorAt(c, state.hour), maxFactor);
+  el.chartNowDotRec.setAttribute('cx', nowX); el.chartNowDotRec.setAttribute('cy', recY);
+  el.chartNowDotUser.setAttribute('cx', nowX); el.chartNowDotUser.setAttribute('cy', userY);
+  el.chartNowDotRec.style.opacity = nowVisible ? '1' : '0';
+  el.chartNowDotUser.style.opacity = nowVisible ? '1' : '0';
+
+  
+  
+  if (chartHoverClientX !== null) renderChartHover(chartHoverClientX);
+}
+
+
+let chartHoverClientX = null;
+
+function chartHourFromClientX(clientX){
+  const rect = el.powerChart.getBoundingClientRect();
+  const svgX = ((clientX - rect.left) / rect.width) * 284;
+  const clampedX = Math.min(CHART.x1, Math.max(CHART.x0, svgX));
+  return CHART_START + ((clampedX - CHART.x0) / (CHART.x1 - CHART.x0)) * (CHART_END - CHART_START);
+}
+
+function renderChartHover(clientX){
+  const hour = chartHourFromClientX(clientX);
+  const c = currentCity();
+  const maxFactor = currentMaxFactor(c);
+  const recF = recommendedFactorAt(c, hour);
+  const userF = userFactorAt(c, hour);
+  const x = chartX(hour);
+
+  el.chartHoverLine.setAttribute('x1', x); el.chartHoverLine.setAttribute('x2', x);
+  el.chartHoverLine.style.opacity = '1';
+  el.chartHoverDotRec.setAttribute('cx', x); el.chartHoverDotRec.setAttribute('cy', chartY(recF, maxFactor));
+  el.chartHoverDotUser.setAttribute('cx', x); el.chartHoverDotUser.setAttribute('cy', chartY(userF, maxFactor));
+  el.chartHoverDotRec.style.opacity = '1';
+  el.chartHoverDotUser.style.opacity = '1';
+
+  el.chartTooltipTime.textContent = fmtTimeHHMM(hour);
+  if (recF > 0) {
+    const userRelative = userF / recF;
+
+    el.chartTooltipRec.textContent = '100%';
+    el.chartTooltipUser.textContent =
+      `${Math.round(userRelative * 100)}%`;
+  } else {
+    el.chartTooltipRec.textContent = '0%';
+    el.chartTooltipUser.textContent = '0%';
+  }
+  el.chartTooltip.classList.add('is-visible');
+}
+
+function hideChartHover(){
+  chartHoverClientX = null;
+  el.chartHoverLine.style.opacity = '0';
+  el.chartHoverDotRec.style.opacity = '0';
+  el.chartHoverDotUser.style.opacity = '0';
+  el.chartTooltip.classList.remove('is-visible');
+}
+
+el.chartHoverTarget.addEventListener('pointerenter', e => {
+  chartHoverClientX = e.clientX;
+  renderChartHover(e.clientX);
+});
+el.chartHoverTarget.addEventListener('pointermove', e => {
+  chartHoverClientX = e.clientX;
+  renderChartHover(e.clientX);
+});
+el.chartHoverTarget.addEventListener('pointerleave', hideChartHover);
+el.chartHoverTarget.addEventListener('pointercancel', hideChartHover);
+
+
+function updateReadouts(){
+  const c = currentCity();
+
+  const recF = recommendedFactorAt(c, state.hour);
+  const userF = userFactorAt(c, state.hour);
+
+  if (recF > 0) {
+    const relativeUser = userF / recF;
+
+    el.recOutput.textContent = '100%';
+    el.userOutput.textContent =
+      `${Math.round(relativeUser * 100)}%`;
+  } else {
+    el.recOutput.textContent = '0%';
+    el.userOutput.textContent = '0%';
+  }
+
+  
+  const el_ = realSunElevationDeg(c, state.hour);
+
+  el.sunElevation.textContent = el_ > 0
+    ? `${Math.round(el_)}° above horizon`
+    : 'Below horizon';
+
+  el.ghiVal.textContent = `${c.ghi.toFixed(1)} kWh/m²/day`;
+  el.optTilt.textContent = fmtDeg(c.tilt);
+  el.optAz.textContent = `${fmtDeg(c.az)} ${compassPoint(c.az)}`;
+
+  let recAnnual, userAnnual;
+  if (c._hourly) {
+    const recDailyWhM2 = c._recDailyTotalWhM2;
+    const userDailyWhM2 = realDailyTotalWhM2(c, state.tilt, state.az);
+    recAnnual = Math.round(recDailyWhM2 / 1000 * 365 * PERFORMANCE_RATIO);
+    userAnnual = Math.round(userDailyWhM2 / 1000 * 365 * PERFORMANCE_RATIO);
+  } else {
+    const recDaily = dailyIntegral(c.tilt, c.az);
+    const userDaily = dailyIntegral(state.tilt, state.az);
+    recAnnual = Math.round(c.ghi * 365 * PERFORMANCE_RATIO);
+    const relativeFallback = recDaily > 0 ? Math.min(1, userDaily / recDaily) : 0;
+    userAnnual = Math.round(recAnnual * relativeFallback);
+  }
+  el.recYield.textContent = `${recAnnual.toLocaleString()} kWh/kWp`;
+  el.userYield.textContent = `${userAnnual.toLocaleString()} kWh/kWp`;
+
+
+  const lossPct = recAnnual > 0 ? Math.max(0, Math.round((1 - userAnnual / recAnnual) * 100)) : 0;
+  const lossAnnual = Math.max(0, recAnnual - userAnnual);
+  if (lossPct <= 1){
+    el.lossBanner.innerHTML = `<strong>Matched.</strong> Your setup is capturing essentially all of the potential annual yield for ${c.name}.`;
+    el.lossBanner.classList.add('is-matched');
+    el.lossYield.textContent = '0 kWh/kWp';
+    el.lossYield.classList.add('is-matched');
+    el.lossYieldSub.textContent = 'Matched — no meaningful loss';
+  } else {
+    el.lossBanner.innerHTML = `You're leaving about <strong>${lossPct}%</strong> of potential annual yield on the table in ${c.name}.`;
+    el.lossBanner.classList.remove('is-matched');
+    el.lossYield.textContent = `${lossAnnual.toLocaleString()} kWh/kWp`;
+    el.lossYield.classList.remove('is-matched');
+    el.lossYieldSub.textContent = `${lossPct}% below the recommended orientation`;
+  }
+
+  updateChart();
+}
+
+function updateSliderLabels(){
+  el.timeValue.textContent = fmtTimeHHMM(state.hour);
+  el.tiltValue.textContent = fmtDeg(state.tilt);
+  el.azValue.textContent = `${fmtDeg(state.az)} ${compassPoint(state.az)}`;
+}
+
+
+let liveStatusTimer = null;
+function announceLiveStatus(){
+  clearTimeout(liveStatusTimer);
+  liveStatusTimer = setTimeout(() => {
+    const c = currentCity();
+    const recF = recommendedFactorAt(c, state.hour);
+    const userF = userFactorAt(c, state.hour);
+    const relative = recF > 0 ? userF / recF : 0; 
+    const lossPct = Math.max(0, Math.round((1 - relative) * 100));
+    const outputSummary = lossPct <= 1
+      ? 'matching the recommended orientation'
+      : `about ${lossPct}% below the recommended orientation`;
+    el.liveStatus.textContent =
+      `${fmtTimeHHMM(state.hour)}. Your panel at ${fmtDeg(state.tilt)} tilt, ` +
+      `${fmtDeg(state.az)} ${compassPoint(state.az)} azimuth, is ${outputSummary} for ${c.name}.`;
+  }, 600);
+}
+
+function refreshAll(){
+  updateSliderLabels();
+  renderFrame();
+  updateReadouts();
+  announceLiveStatus();
+}
+
+
+const PANEL_CONFIG_KEY = 'apolius.panelConfig';
+const isValidTilt = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 90;
+const isValidAzimuth = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 360;
+
+function readLocalPanelConfig(){
+  try {
+    const parsed = JSON.parse(localStorage.getItem(PANEL_CONFIG_KEY));
+    if (!parsed || !isValidTilt(parsed.tilt_deg) || !isValidAzimuth(parsed.azimuth_deg)) return null;
+    return { tilt: parsed.tilt_deg, az: parsed.azimuth_deg };
+  } catch { return null; }
+}
+
+function writeLocalPanelConfig(tilt, az){
+  try {
+    localStorage.setItem(PANEL_CONFIG_KEY, JSON.stringify({ tilt_deg: tilt, azimuth_deg: az }));
+  } catch { /* private-browsing / storage full -- the backend sync (if any) still applies this session */ }
+}
+
+async function fetchBackendPanelConfig(){
+  try {
+    const res = await fetch(`${API_BASE}/api/config`);
+    if (!res.ok) return null; 
+    const data = await res.json();
+    if (!isValidTilt(data.tilt_deg) || !isValidAzimuth(data.azimuth_deg)) return null;
+    return { tilt: data.tilt_deg, az: data.azimuth_deg };
+  } catch {
+    return null; // backend unreachable -- localStorage-only mode
+  }
+}
+
+function syncPanelConfigToBackend(tilt, az){
+  fetch(`${API_BASE}/api/config`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tilt_deg: tilt, azimuth_deg: az }),
+  }).catch(() => {   });
+}
+
+function applyPanelConfig(tilt, az){
+  state.tilt = tilt; state.az = az;
+  state.savedTilt = tilt; state.savedAz = az;
+  el.tiltSlider.value = tilt; el.azSlider.value = az;
+}
+
+
+let isFirstRunSetup = true;
+
+function clearSetupModalError(){
+  el.setupModalError.hidden = true;
+  el.setupModalError.textContent = '';
+  el.setupTilt.classList.remove('is-invalid');
+  el.setupAz.classList.remove('is-invalid');
+}
+
+function openSetupModal({ blocking }){
+  isFirstRunSetup = blocking;
+  el.setupModalCancel.hidden = blocking;
+  el.setupModalClose.hidden = blocking;
+  el.setupTilt.value = Math.round(state.tilt);
+  el.setupAz.value = Math.round(state.az);
+  clearSetupModalError();
+  el.setupModal.showModal();
+  el.setupTilt.focus();
+}
+
+el.setupModal.addEventListener('cancel', (e) => {
+  if (isFirstRunSetup) e.preventDefault(); 
+});
+el.setupModalCancel.addEventListener('click', () => el.setupModal.close());
+el.setupModalClose.addEventListener('click', () => el.setupModal.close());
+el.settingsFab.addEventListener('click', () => openSetupModal({ blocking: false }));
+
+el.setupModalForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const tilt = parseFloat(el.setupTilt.value);
+  const az = parseFloat(el.setupAz.value);
+  const tiltOk = isValidTilt(tilt), azOk = isValidAzimuth(az);
+  if (!tiltOk || !azOk){
+    el.setupModalError.textContent = !tiltOk
+      ? 'Enter a tilt between 0° and 90°.'
+      : 'Enter an azimuth between 0° and 360°.';
+    el.setupModalError.hidden = false;
+    el.setupTilt.classList.toggle('is-invalid', !tiltOk);
+    el.setupAz.classList.toggle('is-invalid', !azOk);
+    return;
+  }
+  applyPanelConfig(tilt, az);
+  writeLocalPanelConfig(tilt, az);
+  syncPanelConfigToBackend(tilt, az);
+  isFirstRunSetup = false;
+  el.setupModal.close();
+  refreshAll();
+});
+
+async function initPanelConfig(){
+  const local = readLocalPanelConfig();
+  if (local){
+    applyPanelConfig(local.tilt, local.az);
+    isFirstRunSetup = false;
+    syncPanelConfigToBackend(local.tilt, local.az); 
+    return;
+  }
+  const remote = await fetchBackendPanelConfig();
+  if (remote){
+    applyPanelConfig(remote.tilt, remote.az);
+    writeLocalPanelConfig(remote.tilt, remote.az);
+    isFirstRunSetup = false;
+    refreshAll(); 
+    return;
+  }
+  openSetupModal({ blocking: true });
+}
+
+
+function clearPanelConfig(){
+  try { localStorage.removeItem(PANEL_CONFIG_KEY); } catch { /* private browsing -- nothing local to clear */ }
+  openSetupModal({ blocking: true });
+}
+if (new URLSearchParams(location.search).get('embed') === 'scroll-preview') {
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'apolius:reset-panel-setup') clearPanelConfig();
+  });
+}
+
+
+el.timeSlider.addEventListener('input', () => { state.hour = parseFloat(el.timeSlider.value); refreshAll(); });
+el.tiltSlider.addEventListener('input', () => { state.tilt = parseFloat(el.tiltSlider.value); refreshAll(); });
+el.azSlider.addEventListener('input', () => { state.az = parseFloat(el.azSlider.value); refreshAll(); });
+
+
+function wireValueEdit(displayBtn, input, slider, onCommit, { parse = parseFloat, format } = {}){
+  let closing = false;
+  const errorId = `${input.id}-error`;
+
+  const clearError = () => {
+    input.classList.remove('is-invalid');
+    input.removeAttribute('aria-invalid');
+    input.removeAttribute('aria-describedby');
+    const hint = document.getElementById(errorId);
+    if (hint) hint.remove();
+  };
+
+  const showError = (msg) => {
+    input.classList.add('is-invalid');
+    input.setAttribute('aria-invalid', 'true');
+    let hint = document.getElementById(errorId);
+    if (!hint){
+      hint = document.createElement('span');
+      hint.id = errorId;
+      hint.className = 'value-input-error';
+      hint.setAttribute('role', 'alert');
+      input.insertAdjacentElement('afterend', hint);
+    }
+    hint.textContent = msg;
+    input.setAttribute('aria-describedby', errorId);
+  };
+
+  const openEditor = () => {
+    input.value = format ? format(parseFloat(slider.value)) : slider.value;
+    displayBtn.hidden = true;
+    input.hidden = false;
+    input.focus();
+    input.select();
+  };
+  const closeEditor = ({ restoreFocus = false } = {}) => {
+    closing = true;
+    clearError();
+    input.hidden = true;
+    displayBtn.hidden = false;
+    if (restoreFocus) displayBtn.focus();
+    closing = false;
+  };
+  const commit = ({ restoreFocus = false, keepOpenOnError = false } = {}) => {
+    if (closing) return;
+    const min = parseFloat(slider.min), max = parseFloat(slider.max), step = parseFloat(slider.step);
+    let v = parse(input.value);
+    if (Number.isNaN(v)){
+      if (keepOpenOnError){ showError(`Enter a valid value, like ${format ? format(parseFloat(slider.value)) : slider.value}.`); return; }
+      closeEditor({ restoreFocus }); 
+      return;
+    }
+    v = Math.min(max, Math.max(min, v));
+    v = Math.round(v / step) * step;
+    slider.value = v;
+    onCommit(v);
+    closeEditor({ restoreFocus });
+  };
+  displayBtn.addEventListener('click', openEditor);
+  input.addEventListener('input', () => { if (input.classList.contains('is-invalid')) clearError(); });
+  input.addEventListener('blur', (e) => {
+    if (closing) return;
+    commit({ restoreFocus: e.relatedTarget == null });
+  });
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter'){ e.preventDefault(); commit({ restoreFocus: true, keepOpenOnError: true }); }
+    else if (e.key === 'Escape'){ e.preventDefault(); closeEditor({ restoreFocus: true }); }
+  });
+}
+wireValueEdit(el.timeValue, el.timeValueInput, el.timeSlider, (v) => { state.hour = v; refreshAll(); }, { parse: parseTimeInput, format: fmtTimeHHMM });
+wireValueEdit(el.tiltValue, el.tiltValueInput, el.tiltSlider, (v) => { state.tilt = v; refreshAll(); });
+wireValueEdit(el.azValue, el.azValueInput, el.azSlider, (v) => { state.az = v; refreshAll(); });
+
+el.citySelect.addEventListener('change', () => {
+  state.cityIndex = parseInt(el.citySelect.value, 10);
+  refreshAll();
+  renderDateNav(); 
+  ensureCurrentCityDateFetched(); 
+});
+
+
+function angularDelta(from, to){
+  let d = ((to - from + 540) % 360) - 180;
+  return d;
+}
+function easeOutExpo(t){ return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+function matchRecommended(){
+  if (state.animating) return;
+  const c = currentCity();
+  const fromTilt = state.tilt, fromAz = state.az;
+  const toTilt = c.tilt, toAz = ((fromAz + angularDelta(fromAz, c.az)) % 360 + 360) % 360;
+  const targetAzRaw = fromAz + angularDelta(fromAz, c.az);
+
+  if (state.reducedMotion){
+    state.tilt = c.tilt; state.az = ((c.az % 360) + 360) % 360;
+    el.tiltSlider.value = state.tilt; el.azSlider.value = state.az;
+    refreshAll();
+    flashMatched();
+    return;
+  }
+
+  state.animating = true;
+  el.matchBtn.disabled = true;
+  const duration = 620;
+  const start = performance.now();
+
+  function frame(now){
+    const t = Math.min(1, (now - start) / duration);
+    const e = easeOutExpo(t);
+    state.tilt = fromTilt + (toTilt - fromTilt) * e;
+    state.az = ((fromAz + (targetAzRaw - fromAz) * e) % 360 + 360) % 360;
+    el.tiltSlider.value = state.tilt;
+    el.azSlider.value = state.az;
+    refreshAll();
+    if (t < 1){
+      requestAnimationFrame(frame);
+    } else {
+      state.tilt = c.tilt; state.az = ((c.az % 360) + 360) % 360;
+      el.tiltSlider.value = state.tilt; el.azSlider.value = state.az;
+      refreshAll();
+      state.animating = false;
+      el.matchBtn.disabled = false;
+      flashMatched();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function flashMatched(){
+  el.matchBtn.classList.remove('is-pulse');
+  void el.matchBtn.offsetWidth;
+  el.matchBtn.classList.add('is-pulse');
+}
+el.matchBtn.addEventListener('click', matchRecommended);
+
+
+function resetToYourSetup(){
+  if (state.animating) return;
+  const fromTilt = state.tilt, fromAz = state.az;
+  const toTilt = state.savedTilt, toAz = ((fromAz + angularDelta(fromAz, state.savedAz)) % 360 + 360) % 360;
+  const targetAzRaw = fromAz + angularDelta(fromAz, state.savedAz);
+
+  if (state.reducedMotion){
+    state.tilt = state.savedTilt; state.az = ((state.savedAz % 360) + 360) % 360;
+    el.tiltSlider.value = state.tilt; el.azSlider.value = state.az;
+    refreshAll();
+    flashReset();
+    return;
+  }
+
+  state.animating = true;
+  el.resetToSetupBtn.disabled = true;
+  const duration = 620;
+  const start = performance.now();
+
+  function frame(now){
+    const t = Math.min(1, (now - start) / duration);
+    const e = easeOutExpo(t);
+    state.tilt = fromTilt + (toTilt - fromTilt) * e;
+    state.az = ((fromAz + (targetAzRaw - fromAz) * e) % 360 + 360) % 360;
+    el.tiltSlider.value = state.tilt;
+    el.azSlider.value = state.az;
+    refreshAll();
+    if (t < 1){
+      requestAnimationFrame(frame);
+    } else {
+      state.tilt = state.savedTilt; state.az = ((state.savedAz % 360) + 360) % 360;
+      el.tiltSlider.value = state.tilt; el.azSlider.value = state.az;
+      refreshAll();
+      state.animating = false;
+      el.resetToSetupBtn.disabled = false;
+      flashReset();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+function flashReset(){
+  el.resetToSetupBtn.classList.remove('is-pulse');
+  void el.resetToSetupBtn.offsetWidth;
+  el.resetToSetupBtn.classList.add('is-pulse');
+}
+el.resetToSetupBtn.addEventListener('click', resetToYourSetup);
+
+
+function pulseDockLoading(duration){
+  [el.compareBlock, el.chartBlock, el.factsBlock].forEach(b => b.classList.add('is-loading-dock'));
+  window.setTimeout(() => {
+    [el.compareBlock, el.chartBlock, el.factsBlock].forEach(b => b.classList.remove('is-loading-dock'));
+  }, duration);
+}
+
+function withDockLoading(promise){
+  [el.compareBlock, el.chartBlock, el.factsBlock].forEach(b => b.classList.add('is-loading-dock'));
+  return promise.finally(() => {
+    [el.compareBlock, el.chartBlock, el.factsBlock].forEach(b => b.classList.remove('is-loading-dock'));
+  });
+}
+
+initPanelConfig();
+refreshAll();
+
+const INTRO_SEEN_KEY = 'apolius.introSeen';
+let introAlreadySeen = false;
+try { introAlreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === '1'; }
+catch { /* private browsing / storage blocked -- falls back to showing it every open */ }
+
+if (introAlreadySeen){
+  el.sceneLoading.classList.add('is-hidden');
+  [el.compareBlock, el.chartBlock, el.factsBlock].forEach(b => b.classList.remove('is-loading-dock'));
+} else {
+  window.setTimeout(() => {
+    el.sceneLoading.classList.add('is-hidden');
+    [el.compareBlock, el.chartBlock, el.factsBlock].forEach(b => b.classList.remove('is-loading-dock'));
+    try { sessionStorage.setItem(INTRO_SEEN_KEY, '1'); }
+    catch { /* private browsing -- harmless, it'll just show again next open */ }
+  }, 1150);
+}
+
+window.setTimeout(() => {
+  if (!hintHidden) el.cameraHint.classList.add('is-hidden');
+}, 9000);
+</script>
+ 
+<script src="http://localhost:8400/live.js"></script>
+ 
+</body>
+</html>

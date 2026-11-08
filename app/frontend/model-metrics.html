@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Model Metrics - Orientation Studio</title>
+<meta name="description" content="How the irradiance prediction model was chosen, and how its prediction becomes a recommended panel orientation.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0d14">
+<link rel="icon" href="favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon/apolius-favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="icon" href="favicon/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon/favicon-48.png" sizes="48x48" type="image/png">
+<link rel="apple-touch-icon" href="favicon/favicon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+
+    /* ---- semantic brand: shared verbatim with dashboard.html ---- */
+    --gold:        #d98f4a;
+    --gold-strong: color-mix(in oklch, var(--gold), black 12%);
+    --gold-soft:   color-mix(in oklch, var(--gold), white 35%);
+    --gold-dim:    color-mix(in oklch, var(--gold), black 55%);
+
+    --blue:        #a8ceff;
+    --blue-strong: color-mix(in oklch, var(--blue), black 14%);
+    --blue-soft:   color-mix(in oklch, var(--blue), white 35%);
+    --blue-dim:    color-mix(in oklch, var(--blue), black 58%);
+
+    --violet:      oklch(72% 0.09 300);
+    --violet-soft: color-mix(in oklch, var(--violet), white 32%);
+
+    --loss:      #ab2b2b;
+    --loss-soft: color-mix(in oklch, var(--loss), white 34%);
+
+    --danger:      #e05252;
+    --danger-soft: color-mix(in oklch, var(--danger), white 30%);
+
+    /* ---- radius scale ---- */
+    --radius-xs:   4px;
+    --radius-sm:   5px;
+    --radius-md:   8px;
+    --radius-lg:   6px;
+    --radius-pill: 100px;
+
+    /* ---- tinted neutrals ---- */
+    --void:      oklch(8%  0.020 258);
+    --bg:        oklch(11% 0.018 258);
+    --surface-1: oklch(15.5% 0.020 258);
+    --surface-2: oklch(19.5% 0.022 258);
+    --surface-3: oklch(24% 0.024 258);
+    --border:    oklch(30% 0.020 258);
+    --border-strong: oklch(40% 0.024 258);
+    --glass-panel:   oklch(15.5% 0.02 258 / 0.86);
+    --glass-popover: oklch(13%   0.02 258 / 0.97);
+    --glass-blur: blur(18px) saturate(140%);
+
+    --text:    oklch(96% 0.006 258);
+    --text-2:  oklch(78% 0.012 258);
+    --text-3:  oklch(64% 0.014 258);
+    --text-4:  oklch(59% 0.016 258);
+
+    /* ---- type ---- */
+    --font-ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --font-num: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+    --fs-2xs: 0.6875rem;
+    --fs-xs:  0.75rem;
+    --fs-sm:  0.8125rem;
+    --fs-md:  0.9375rem;
+    --fs-lg:  1.125rem;
+    --fs-xl:  1.5rem; /* section headings -- dashboard.html has none, so this is a genuine (documented) local addition to the shared scale */
+    --fs-value-sm: 1.375rem;
+    --fs-value-md: 1.875rem;
+    --fs-value-lg: 2.75rem;
+
+    /* ---- spacing (4pt base) ---- */
+    --sp-1: 0.25rem;
+    --sp-2: 0.5rem;
+    --sp-3: 0.75rem;
+    --sp-4: 1rem;
+    --sp-5: 1.5rem;
+    --sp-6: 2rem;
+    --sp-7: 3rem;
+
+    /* ---- motion ---- */
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --dur-fast: 150ms;
+    --dur-med:  240ms;
+
+    /* ---- z-scale: only the sticky topbar needs one on this page ---- */
+    --z-chrome: 10;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    font-family: var(--font-ui);
+    background: var(--void);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3,p{ margin:0; }
+  svg{ display:block; }
+
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  :focus-visible{
+    outline: 2px solid var(--blue-soft);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* ============ topbar ============ */
+
+  .mm-topbar{
+    position: sticky; top:0; z-index: var(--z-chrome);
+    display:flex; align-items:center; justify-content:space-between;
+    gap: var(--sp-5);
+    padding: var(--sp-4) var(--sp-6);
+    background: var(--glass-panel);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand{ display:flex; align-items:center; gap: var(--sp-3); min-width:0; }
+  .brand-mark{
+    width: 34px; height: 34px; flex: none;
+    border-radius: var(--radius-sm);
+    background: var(--glass-panel);
+    border: 1px solid var(--border);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 4px 14px oklch(0% 0 0 / 0.4);
+  }
+  .brand-mark img{ width:20px; height:auto; }
+  .brand-text{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .brand-name{ font-size: var(--fs-lg); font-weight:600; letter-spacing:-0.01em; line-height:1.15; }
+  .brand-sub{
+    font-size: var(--fs-2xs); color: var(--text-3); letter-spacing:0.01em;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  .back-link{
+    display:flex; align-items:center; gap:7px;
+    font-size: var(--fs-sm); font-weight:500;
+    color: var(--text);
+    text-decoration:none;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    white-space:nowrap;
+    transition: border-color var(--dur-fast) var(--ease-out-quart), background var(--dur-fast) var(--ease-out-quart);
+  }
+  .back-link:hover, .back-link:focus-visible{ border-color: var(--border-strong); background: var(--surface-2); }
+  .back-link svg{ width:14px; height:14px; flex:none; }
+
+  /* ============ layout ============ */
+
+  .mm-main{
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: var(--sp-7) var(--sp-6) calc(var(--sp-7) * 2);
+    display:flex; flex-direction:column;
+    gap: calc(var(--sp-7) * 1.4);
+  }
+
+  .mm-section{ display:flex; flex-direction:column; gap: var(--sp-5); }
+  .mm-section-head{ display:flex; flex-direction:column; gap: var(--sp-2); max-width: 62ch; }
+  .mm-section-head h2{ font-size: var(--fs-xl); font-weight:600; letter-spacing:-0.01em; text-wrap: balance; }
+  .mm-section-head p{ font-size: var(--fs-md); color: var(--text-3); line-height:1.55; text-wrap: pretty; }
+
+  /* ============ shared panel primitives -- verbatim from dashboard.html ============ */
+
+  .panel-block{
+    background: var(--glass-panel);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--sp-4);
+  }
+
+  .metric{ display:flex; flex-direction:column; gap:2px; padding: var(--sp-1) 0; }
+  .metric-label{ display:flex; align-items:center; gap:6px; font-size: var(--fs-2xs); color: var(--text-3); letter-spacing: 0.02em; }
+  .metric-value{
+    font-family: var(--font-num);
+    font-weight: 600;
+    font-size: var(--fs-value-lg);
+    line-height:1;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .metric--violet .metric-value{ color: var(--violet-soft); text-shadow: 0 0 22px color-mix(in oklch, var(--violet) 35%, transparent); }
+
+  .facts-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3) var(--sp-4); }
+  .split-table{ width:100%; border-collapse:collapse; margin-top: var(--sp-3); font-size: var(--fs-xs); }
+  .split-table caption{ text-align:left; font-size: var(--fs-2xs); color: var(--text-4); padding-bottom: var(--sp-2); }
+  .split-table th, .split-table td{ padding: 5px var(--sp-2); text-align:right; border-bottom: 1px solid var(--border); }
+  .split-table th:first-child, .split-table td:first-child{ text-align:left; color: var(--text-3); }
+  .split-table thead th{ color: var(--text-3); font-weight:600; font-size: var(--fs-2xs); text-transform:uppercase; letter-spacing:0.03em; }
+  .split-table td.is-na{ color: var(--text-4); font-style:italic; }
+  .fact{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .fact-label{ font-size: var(--fs-2xs); color: var(--text-4); letter-spacing: 0.01em; }
+  .fact-value{
+    font-family: var(--font-num);
+    font-size: var(--fs-value-sm);
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+    line-height:1.15;
+  }
+  .fact-value--gold{ color: var(--gold-soft); }
+
+  .legend-chip{
+    display:inline-flex; align-items:center;
+    padding: 6px 13px;
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-2xs);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .legend-chip--violet{ color: var(--violet-soft); background: var(--surface-2); }
+  .legend-chip--muted{ color: var(--text-3); background: var(--surface-2); }
+
+  .panel-note{
+    margin-top: var(--sp-3);
+    padding-top: var(--sp-3);
+    border-top: 1px solid var(--border);
+    font-size: var(--fs-sm);
+    color: var(--text-2);
+    line-height:1.45;
+  }
+
+
+  .info-trigger{
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:6px;
+    margin: -6px -6px -6px -3px;
+    border:none; background:none;
+    color: var(--text-4); cursor:pointer; border-radius:50%;
+    vertical-align:-1px;
+    transition: color var(--dur-fast) var(--ease-out-quart);
+  }
+  .info-trigger:hover, .info-trigger:focus-visible{ color: var(--text-2); }
+  .info-trigger svg{ width:13px; height:13px; }
+
+  .glossary-popover{
+    position: fixed; margin:0; padding:10px 12px;
+    max-width: 230px;
+    background: var(--glass-popover);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 12px 32px oklch(0% 0 0 / 0.45);
+    font-size: var(--fs-xs);
+    line-height:1.5;
+    color: var(--text-2);
+    opacity:0; transform: translateY(-4px) scale(0.98);
+    transition: opacity var(--dur-fast) var(--ease-out-quart), transform var(--dur-fast) var(--ease-out-quart), overlay var(--dur-fast) allow-discrete, display var(--dur-fast) allow-discrete;
+  }
+  .glossary-popover:popover-open{ opacity:1; transform: translateY(0) scale(1); }
+  @starting-style{
+    .glossary-popover:popover-open{ opacity:0; transform: translateY(-4px) scale(0.98); }
+  }
+
+  @keyframes shimmer{
+    0%{ background-position: 200% 0; }
+    100%{ background-position: -200% 0; }
+  }
+  .is-loading-dock .metric-value,
+  .is-loading-dock .fact-value,
+  .is-loading-dock .rank-value{ visibility:hidden; position:relative; }
+  .is-loading-dock .metric-value::after,
+  .is-loading-dock .fact-value::after,
+  .is-loading-dock .rank-value::after{
+    content:"";
+    visibility:visible;
+    position:absolute; inset: 10% 15% 10% 0;
+    border-radius: var(--radius-xs);
+    background: linear-gradient(100deg, var(--surface-2) 30%, var(--surface-3) 50%, var(--surface-2) 70%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s ease-in-out infinite;
+  }
+  .metrics-loading-note{ font-size: var(--fs-sm); color: var(--text-3); letter-spacing: 0.02em; }
+  .metrics-loading-note[hidden]{ display:none; }
+
+  /* -- error fallback: same visual recipe as dashboard.html's .scene-fallback -- */
+  .metrics-error{
+    background: var(--glass-panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    font-size: var(--fs-sm);
+    color: var(--text-2);
+    line-height:1.5;
+  }
+  .metrics-error[hidden]{ display:none; }
+
+  /* ============ section 1: model comparison ============ */
+
+  .model-compare{
+    display:grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: var(--sp-4);
+    align-items:stretch;
+  }
+  .model-compare[hidden]{ display:none; }
+
+  #modelHero{ display:flex; flex-direction:column; gap: var(--sp-5); transition: opacity var(--dur-med) var(--ease-out-quart); }
+  #modelHero.is-switching{ opacity:0; }
+  .model-name-row{ display:flex; align-items:center; justify-content:space-between; gap: var(--sp-3); }
+  .model-name{ font-size: var(--fs-lg); font-weight:600; letter-spacing:-0.01em; }
+
+  #modelList{ display:flex; flex-direction:column; max-height: 280px; overflow-y:auto; scrollbar-width:thin; }
+  #modelList::-webkit-scrollbar{ width:6px; }
+  #modelList::-webkit-scrollbar-thumb{ background: var(--border-strong); border-radius: var(--radius-xs); }
+  .rank-label{ font-size: var(--fs-2xs); color: var(--text-4); letter-spacing:0.02em; margin-bottom: var(--sp-3); }
+  .rank-row{
+    display:flex; flex-direction:column; gap:7px;
+    width: calc(100% + var(--sp-4));
+    padding: var(--sp-3) var(--sp-2);
+    margin: 0 calc(var(--sp-2) * -1);
+    border: none; border-top: 1px solid var(--border);
+    background:none; font: inherit; color: inherit; text-align:left; cursor:pointer;
+    border-radius: var(--radius-xs);
+    transition: background var(--dur-fast) var(--ease-out-quart);
+  }
+  .rank-row:first-of-type{ border-top:none; padding-top: var(--sp-2); }
+  .rank-row:hover, .rank-row:focus-visible{ background: var(--surface-2); }
+  .rank-row-head{ display:flex; align-items:center; justify-content:space-between; gap: var(--sp-3); }
+  .rank-name-group{ display:flex; align-items:center; gap: var(--sp-2); min-width:0; }
+  .rank-name{ font-size: var(--fs-sm); font-weight:500; color: var(--text-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rank-row-right{ display:flex; align-items:center; gap: var(--sp-2); flex:none; }
+  .rank-value{ font-family: var(--font-num); font-size: var(--fs-xs); color: var(--text-3); font-variant-numeric: tabular-nums; white-space:nowrap; }
+  .rank-chevron{ width:14px; height:14px; flex:none; color: var(--text-4); transition: transform var(--dur-fast) var(--ease-out-quart), color var(--dur-fast) var(--ease-out-quart); }
+  .rank-row:hover .rank-chevron, .rank-row:focus-visible .rank-chevron{ color: var(--text-3); transform: translateX(2px); }
+  .rank-bar-track{ height:4px; border-radius: var(--radius-xs); background: var(--surface-3); overflow:hidden; }
+  .rank-bar-fill{ height:100%; border-radius: var(--radius-xs); background: var(--border-strong); }
+
+  /* ============ section 2: funnel ============ */
+
+  .funnel{ display:flex; align-items:center; gap: var(--sp-3); }
+  .funnel[hidden]{ display:none; }
+
+  .funnel-stage{
+    flex: 1; min-width:0;
+    display:flex; flex-direction:column; gap: var(--sp-2);
+  }
+  .funnel-stage.is-outcome{ border-color: color-mix(in oklch, var(--gold) 40%, var(--border)); }
+
+  .funnel-stage.is-process{
+    flex: 0 0 auto;
+    width: 148px; /* 132px measured ~6px narrower than "pvlib simulation" + its info-trigger need to avoid overflow */
+    align-items:center; text-align:center;
+    gap: var(--sp-1);
+  }
+  .funnel-stage.is-process .funnel-stage-icon{
+    width:34px; height:34px; border-radius:50%;
+    background: oklch(100% 0 0 / 0.06);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom: var(--sp-1);
+    color: var(--text-3);
+  }
+  .funnel-stage.is-process .funnel-stage-icon svg{ width:16px; height:16px; }
+  .funnel-stage.is-process .funnel-stage-label{ font-size: var(--fs-xs); color: var(--text-2); }
+
+  .funnel-stage-value{
+    font-family: var(--font-num); font-weight:600;
+    font-size: var(--fs-value-md);
+    line-height:1.15;
+    letter-spacing: -0.005em;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .funnel-stage-value.fact-value--gold{ text-shadow: 0 0 22px color-mix(in oklch, var(--gold) 35%, transparent); }
+  .funnel-stage-note{ font-size: var(--fs-xs); color: var(--text-3); line-height:1.5; }
+
+  .funnel-connector{ flex: 0 0 20px; height:2px; background: linear-gradient(90deg, oklch(100% 0 0/0.03), var(--border-strong), oklch(100% 0 0/0.03)); }
+  .funnel-connector.is-final{ background: linear-gradient(90deg, oklch(100% 0 0/0.03), var(--gold-dim), oklch(100% 0 0/0.03)); }
+
+  .funnel-example-note{ font-size: var(--fs-xs); color: var(--text-4); }
+
+  /* ============ responsive ============ */
+
+  @media (max-width: 980px){
+    .mm-topbar{ padding: var(--sp-3) var(--sp-4); }
+  }
+
+  @media (max-width: 820px){
+    .mm-topbar{ padding: var(--sp-4); }
+    .mm-main{ padding: var(--sp-6) var(--sp-4) calc(var(--sp-6) * 2); gap: var(--sp-7); }
+    .model-compare{ grid-template-columns: 1fr; }
+    .funnel{ flex-direction:column; align-items:stretch; }
+    .funnel-connector{ width:2px; height:20px; align-self:center; background: linear-gradient(180deg, oklch(100% 0 0/0.03), var(--border-strong), oklch(100% 0 0/0.03)); }
+    .funnel-connector.is-final{ background: linear-gradient(180deg, oklch(100% 0 0/0.03), var(--gold-dim), oklch(100% 0 0/0.03)); }
+    .funnel-stage.is-process{ width:auto; flex-direction:row; text-align:left; justify-content:flex-start; gap: var(--sp-3); }
+    .funnel-stage.is-process .funnel-stage-icon{ margin-bottom:0; flex:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1 class="sr-only">Model Metrics — Orientation Studio</h1>
+
+  <header class="mm-topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <img src="favicon/apolius-favicon.svg" alt="">
+      </div>
+      <div class="brand-text">
+        <span class="brand-name">Model Metrics</span>
+        <span class="brand-sub">Apolius</span>
+      </div>
+    </div>
+    <a class="back-link" href="dashboard.html">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to scene
+    </a>
+  </header>
+
+  <main class="mm-main">
+
+    <section class="mm-section" aria-labelledby="mm-accuracy-heading">
+      <div class="mm-section-head">
+        <h2 id="mm-accuracy-heading">Prediction accuracy</h2>
+        <p>Four models were evaluated on held-out irradiance data before choosing which one powers the scene. Lower error and higher R&sup2; are better. Select any model below to see its full results.</p>
+      </div>
+
+      <p class="metrics-loading-note" id="metricsLoadingNote">Loading evaluation results…</p>
+      <div class="model-compare" id="modelCompare">
+        <div class="panel-block" id="modelHero"></div>
+        <div class="panel-block" id="modelList"></div>
+      </div>
+      <p class="metrics-error" id="modelCompareError" role="alert" hidden>Couldn't load model evaluation results. Try refreshing the page.</p>
+    </section>
+
+    <section class="mm-section" aria-labelledby="mm-funnel-heading">
+      <div class="mm-section-head">
+        <h2 id="mm-funnel-heading">From prediction to recommendation</h2>
+        <p>The selected model's predicted irradiance feeds a physics-based simulation that searches for the panel orientation with the highest annual yield.</p>
+      </div>
+
+      <div class="funnel" id="funnel"></div>
+      <p class="metrics-error" id="funnelError" role="alert" hidden>Couldn't load the calculation funnel. Try refreshing the page.</p>
+      <p class="funnel-example-note">Kuala Lumpur shown as an example — this recalculates for every city and time of day.</p>
+    </section>
+
+  </main>
+
+  <div class="glossary-popover" id="glossaryPopover" popover="auto" role="tooltip"></div>
+  <div class="sr-only" id="modelSwitchStatus" aria-live="polite"></div>
+
+<script>
+const GLOSSARY = {
+  rmse: "RMSE (Root Mean Squared Error): typical size of the model's prediction miss, in the same units as GHI -- lower is better.",
+  mae: "MAE (Mean Absolute Error): average size of the model's prediction miss -- lower is better, less sensitive to rare large misses than RMSE.",
+  r2: 'R² (variance explained): how much of the real irradiance pattern the model captures, from 0 to 1 -- higher is better.',
+  mbe: "MBE (Mean Bias Error): whether the model systematically over- or under-predicts -- positive means it runs high, negative means it runs low; closer to zero is better.",
+  nrmse: 'nRMSE (Normalized RMSE): RMSE scaled as a percentage of average GHI, so error size is comparable across different irradiance ranges -- lower is better.',
+  pvlib: 'pvlib: an open-source solar-energy physics library used to simulate output at every possible panel angle and find the best one.',
+};
+const glossaryPopover = document.getElementById('glossaryPopover');
+let activeGlossaryTrigger = null;
+glossaryPopover.addEventListener('toggle', (e) => {
+  if (e.newState === 'closed' && activeGlossaryTrigger){
+    activeGlossaryTrigger.setAttribute('aria-expanded', 'false');
+    activeGlossaryTrigger = null;
+  }
+});
+function wireInfoTriggers(root){
+  root.querySelectorAll('.info-trigger').forEach(btn => {
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-describedby', 'glossaryPopover');
+    btn.addEventListener('click', () => {
+      glossaryPopover.textContent = GLOSSARY[btn.dataset.term] || '';
+      if (glossaryPopover.matches(':popover-open')) glossaryPopover.hidePopover();
+      const r = btn.getBoundingClientRect();
+      glossaryPopover.style.left = 'auto';
+      glossaryPopover.style.right = `${Math.round(window.innerWidth - r.right)}px`;
+      glossaryPopover.style.top = `${Math.round(r.bottom + 6)}px`;
+      glossaryPopover.showPopover();
+      if (activeGlossaryTrigger && activeGlossaryTrigger !== btn) activeGlossaryTrigger.setAttribute('aria-expanded', 'false');
+      btn.setAttribute('aria-expanded', 'true');
+      activeGlossaryTrigger = btn;
+    });
+  });
+}
+
+const infoIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 11v5.5M12 7.5v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+const gearIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" stroke="currentColor" stroke-width="1.6"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .34 1.87l.06.06a2.06 2.06 0 1 1-2.9 2.9l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56v.17a2.06 2.06 0 1 1-4.12 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2.06 2.06 0 1 1-2.9-2.9l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03h-.17a2.06 2.06 0 1 1 0-4.12h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2.06 2.06 0 1 1 2.9-2.9l.06.06a1.7 1.7 0 0 0 1.87.34h.08a1.7 1.7 0 0 0 1.03-1.56v-.17a2.06 2.06 0 1 1 4.12 0v.09a1.7 1.7 0 0 0 1.03 1.56h.08a1.7 1.7 0 0 0 1.87-.34l.06-.06a2.06 2.06 0 1 1 2.9 2.9l-.06.06a1.7 1.7 0 0 0-.34 1.87v.08a1.7 1.7 0 0 0 1.56 1.03h.17a2.06 2.06 0 1 1 0 4.12h-.09a1.7 1.7 0 0 0-1.56 1.03Z" stroke="currentColor" stroke-width="1.3"/></svg>';
+
+const API_BASE = 'http://127.0.0.1:8000';
+
+const modelHero = document.getElementById('modelHero');
+const modelList = document.getElementById('modelList');
+const funnelEl = document.getElementById('funnel');
+const modelCompare = document.getElementById('modelCompare');
+const modelCompareError = document.getElementById('modelCompareError');
+const funnelError = document.getElementById('funnelError');
+const metricsLoadingNote = document.getElementById('metricsLoadingNote');
+const modelSwitchStatus = document.getElementById('modelSwitchStatus');
+const rightChevron = '<svg class="rank-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+let modelsData = [];
+let activeModelId = null;
+function getModel(id){ return modelsData.find(m => m.id === id); }
+
+function renderModelHero(model){
+  const chip = model.selected
+    ? '<span class="legend-chip legend-chip--violet">Selected</span>'
+    : '<span class="legend-chip legend-chip--muted">Also evaluated</span>';
+  modelHero.innerHTML = `
+    <div class="model-name-row">
+      <span class="model-name">${model.name}</span>
+      ${chip}
+    </div>
+    <div class="metric metric--violet">
+      <span class="metric-label">R&sup2; — variance explained
+        <button class="info-trigger" type="button" data-term="r2" aria-label="What is R²?">${infoIcon}</button>
+      </span>
+      <span class="metric-value">${model.r2}</span>
+    </div>
+    <div class="facts-grid">
+      <div class="fact">
+        <span class="fact-label">RMSE
+          <button class="info-trigger" type="button" data-term="rmse" aria-label="What is RMSE?">${infoIcon}</button>
+        </span>
+        <span class="fact-value">${model.rmse}</span>
+      </div>
+      <div class="fact">
+        <span class="fact-label">MAE
+          <button class="info-trigger" type="button" data-term="mae" aria-label="What is MAE?">${infoIcon}</button>
+        </span>
+        <span class="fact-value">${model.mae}</span>
+      </div>
+      <div class="fact">
+        <span class="fact-label">MBE
+          <button class="info-trigger" type="button" data-term="mbe" aria-label="What is MBE?">${infoIcon}</button>
+        </span>
+        <span class="fact-value">${model.mbe}</span>
+      </div>
+      <div class="fact">
+        <span class="fact-label">nRMSE
+          <button class="info-trigger" type="button" data-term="nrmse" aria-label="What is nRMSE?">${infoIcon}</button>
+        </span>
+        <span class="fact-value">${model.nrmse}</span>
+      </div>
+    </div>
+    ${renderSplitTable(model.id)}
+    <p class="panel-note">${model.note}${model.selected ? '' : ' The scene and the funnel below still run on LSTM, the model actually selected — this card is a preview, not a swap.'}</p>
+  `;
+  wireInfoTriggers(modelHero);
+}
+
+const SPLIT_METRICS = {
+  lstm: {
+    train: { r2: 0.9441, rmse: 65.90, mse: 4342.55, mbe: 4.37, nrmse: 31.99 },
+    val:   { r2: 0.9428, rmse: 65.51, mse: 4291.95, mbe: 0.39, nrmse: 32.34 },
+    test:  { r2: 0.9402, rmse: 67.13, mse: 4505.90, mbe: 0.28, nrmse: 33.06 },
+  },
+  transformer: {
+    // Last-token pooling (was GlobalAveragePooling1D) -- see PROGRESS.md
+    train: { r2: 0.9401, rmse: 68.21, mse: 4652.51, mbe: 10.21, nrmse: 33.11 },
+    val:   { r2: 0.9387, rmse: 67.83, mse: 4601.05, mbe: 6.10, nrmse: 33.48 },
+    test:  { r2: 0.9361, rmse: 69.38, mse: 4813.30, mbe: 5.94, nrmse: 34.17 },
+  },
+  linreg: {
+    train: { r2: 0.9325, rmse: 72.42, mse: 5244.89, mbe: 7.45, nrmse: 35.16 },
+    val:   { r2: 0.9321, rmse: 71.41, mse: 5099.99, mbe: 6.28, nrmse: 35.25 },
+    test:  { r2: 0.9310, rmse: 72.08, mse: 5195.51, mbe: 2.73, nrmse: 35.50 },
+  },
+  ensemble: {
+    // STALE -- see file-header comment above. Pre-refit (old 3-model, Transformer h) numbers.
+    train: null, // no separate training -- fixed-weight combination of the models above
+    val:   { r2: 0.9432, rmse: 65.30, mse: 4263.96, mbe: 0.67, nrmse: 32.23 },
+    test:  { r2: 0.9408, rmse: 66.78, mse: 4459.37, mbe: 0.57, nrmse: 32.89 },
+  },
+};
+
+function renderSplitTable(modelId){
+  const splits = SPLIT_METRICS[modelId];
+  if (!splits) return '';
+  const cell = (split, key, fmt) => {
+    const s = splits[split];
+    if (!s) return '<td class="is-na">N/A</td>';
+    return `<td>${fmt(s[key])}</td>`;
+  };
+  const row = (label, key, fmt) => `
+    <tr>
+      <th scope="row">${label}</th>
+      ${cell('train', key, fmt)}
+      ${cell('val', key, fmt)}
+      ${cell('test', key, fmt)}
+    </tr>`;
+  const f2 = (v) => v.toFixed(2);
+  const f4 = (v) => v.toFixed(4);
+  const pct = (v) => `${v.toFixed(2)}%`;
+  return `
+    <table class="split-table">
+      <caption>Train / validation / test (standard windowed evaluation)</caption>
+      <thead><tr><th scope="col"></th><th scope="col">Train</th><th scope="col">Val</th><th scope="col">Test</th></tr></thead>
+      <tbody>
+        ${row('R&sup2;', 'r2', f4)}
+        ${row('RMSE', 'rmse', f2)}
+        ${row('MSE', 'mse', f2)}
+        ${row('MBE', 'mbe', f2)}
+        ${row('nRMSE', 'nrmse', pct)}
+      </tbody>
+    </table>`;
+}
+
+function renderModelList(models, activeId){
+  const WORST_RMSE = Math.max(...models.map(m => parseFloat(m.rmse)));
+  const rows = models.filter(m => m.id !== activeId).map(m => {
+    const pct = Math.round((parseFloat(m.rmse) / WORST_RMSE) * 100);
+    const chip = m.selected ? '<span class="legend-chip legend-chip--violet">Selected</span>' : '';
+    return `
+      <button class="rank-row" type="button" data-model-id="${m.id}" aria-label="View ${m.name} model details">
+        <div class="rank-row-head">
+          <span class="rank-name-group">
+            <span class="rank-name">${m.name}</span>
+            ${chip}
+          </span>
+          <span class="rank-row-right">
+            <span class="rank-value">R&sup2; ${m.r2} · RMSE ${m.rmse} · MAE ${m.mae}</span>
+            ${rightChevron}
+          </span>
+        </div>
+        <div class="rank-bar-track"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+      </button>
+    `;
+  }).join('');
+  modelList.innerHTML = `<span class="rank-label">Also evaluated</span>${rows}`;
+  modelList.querySelectorAll('.rank-row').forEach(btn => {
+    btn.addEventListener('click', () => switchModel(btn.dataset.modelId));
+  });
+}
+
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let switchTimer = null;
+
+function switchModel(id){
+  if (id === activeModelId) return;
+  if (switchTimer) window.clearTimeout(switchTimer);
+  modelHero.classList.add('is-switching');
+  const delay = prefersReducedMotion.matches ? 0 : 240;
+  switchTimer = window.setTimeout(() => {
+    switchTimer = null;
+    activeModelId = id;
+    const model = getModel(activeModelId);
+    renderModelHero(model);
+    renderModelList(modelsData, activeModelId);
+    modelHero.classList.remove('is-switching');
+    modelSwitchStatus.textContent = `Now viewing ${model.name} model details`;
+  }, delay);
+}
+
+function renderFunnel(funnel){
+  funnelEl.innerHTML = '';
+  funnel.forEach((stage, i) => {
+    if (i > 0) {
+      const isFinal = funnel[i].kind === 'outcome';
+      const connector = document.createElement('div');
+      connector.className = 'funnel-connector' + (isFinal ? ' is-final' : '');
+      funnelEl.appendChild(connector);
+    }
+    const stageEl = document.createElement('div');
+    const kindClass = stage.kind === 'outcome' ? ' is-outcome' : stage.kind === 'process' ? ' is-process' : '';
+    stageEl.className = 'panel-block funnel-stage' + kindClass;
+    if (stage.kind === 'process') {
+      stageEl.innerHTML = `
+        <div class="funnel-stage-icon">${gearIcon}</div>
+        <span class="funnel-stage-label">
+          ${stage.label}
+          <button class="info-trigger" type="button" data-term="pvlib" aria-label="What is pvlib?">${infoIcon}</button>
+        </span>
+      `;
+    } else {
+      const valueClass = stage.kind === 'outcome' ? ' fact-value--gold' : '';
+      stageEl.innerHTML = `
+        <span class="fact-label">${stage.label}</span>
+        <span class="funnel-stage-value${valueClass}">${stage.value}</span>
+        <p class="funnel-stage-note">${stage.note}</p>
+      `;
+    }
+    funnelEl.appendChild(stageEl);
+  });
+  wireInfoTriggers(funnelEl);
+}
+
+async function fetchMetrics(){
+  const [metricsRes, predictRes] = await Promise.all([
+    fetch(`${API_BASE}/api/metrics`),
+    fetch(`${API_BASE}/api/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location: 'kuala_lumpur',
+        date: '2025-12-31'
+      }),
+    }),
+  ]);
+  if (!metricsRes.ok || !predictRes.ok) throw new Error('bad response');
+  const models = await metricsRes.json();
+  const predict = await predictRes.json();
+
+  const selectedModel = models.find(m => m.selected);
+  const replayNote = predict.is_replay
+    ? ` -- replaying ${predict.replay_basis_date} \u2192 ${predict.date} (no live weather feed yet, see backend/README.md)`
+    : '';
+  const funnel = [
+    {
+      label: 'Predicted GHI',
+      value: `${predict.predicted_ghi_kwh_m2_total.toFixed(1)} kWh/m\u00b2/day`,
+      note: `${selectedModel ? selectedModel.name : 'Model'} output for Kuala Lumpur${replayNote}.`,
+      kind: 'data',
+    },
+    { label: 'pvlib simulation', kind: 'process' },
+    {
+      label: 'Recommended angle',
+      value: `${Math.round(predict.recommended.tilt_deg)}\u00b0 tilt \u00b7 ${Math.round(predict.recommended.azimuth_deg)}\u00b0 azimuth`,
+      note: 'The orientation with the highest simulated annual yield for this prediction \u2014 the gold panel in the scene.',
+      kind: 'outcome',
+    },
+  ];
+  return { models, funnel };
+}
+
+async function loadMetrics(){
+  try {
+    const data = await fetchMetrics();
+    modelsData = data.models;
+    activeModelId = modelsData.find(m => m.selected).id;
+    renderModelHero(getModel(activeModelId));
+    renderModelList(modelsData, activeModelId);
+    renderFunnel(data.funnel);
+
+    const loadingTargets = [modelHero, modelList, ...funnelEl.querySelectorAll('.panel-block')];
+    loadingTargets.forEach(el => el.classList.add('is-loading-dock'));
+    window.setTimeout(() => {
+      loadingTargets.forEach(el => el.classList.remove('is-loading-dock'));
+      metricsLoadingNote.hidden = true;
+    }, 1150);
+  } catch (err) {
+    metricsLoadingNote.hidden = true;
+    modelCompare.hidden = true;
+    modelCompareError.hidden = false;
+    funnelEl.hidden = true;
+    funnelError.hidden = false;
+  }
+}
+loadMetrics();
+</script>
+
+<!-- impeccable-live-start -->
+<script src="http://localhost:8400/live.js"></script>
+<!-- impeccable-live-end -->
+</body>
+</html>
